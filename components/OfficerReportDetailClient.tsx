@@ -452,11 +452,14 @@ export default function OfficerReportDetailClient({
 
             {/* Officer Note */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
+              <label htmlFor="officer-transition-note" className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">
                 Officer Transition Note
               </label>
               <textarea
+                id="officer-transition-note"
+                name="statusNote"
                 rows={2}
+                aria-label="Officer notes for status transition"
                 placeholder="Optional notes for the status change (e.g. Field inspection completed, repair initiated)..."
                 value={statusNote}
                 onChange={(e) => setStatusNote(e.target.value)}

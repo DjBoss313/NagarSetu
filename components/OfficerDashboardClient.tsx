@@ -232,16 +232,20 @@ export default function OfficerDashboardClient({
           <div className="relative flex-1">
             <input
               type="text"
+              name="officerSearch"
+              aria-label="Search complaints by code, keyword, or address"
               placeholder="Search by code (NS-...), keyword, or address..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
             />
-            <span className="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
+            <span aria-hidden="true" className="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
           </div>
 
           {/* Status Filter */}
           <select
+            name="statusFilter"
+            aria-label="Filter complaints by status"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
@@ -256,6 +260,8 @@ export default function OfficerDashboardClient({
 
           {/* Category Filter */}
           <select
+            name="categoryFilter"
+            aria-label="Filter complaints by category"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
@@ -270,6 +276,8 @@ export default function OfficerDashboardClient({
 
           {/* Priority Filter */}
           <select
+            name="priorityFilter"
+            aria-label="Filter complaints by priority level"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
             className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"

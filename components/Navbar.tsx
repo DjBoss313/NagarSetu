@@ -67,7 +67,7 @@ export default function Navbar() {
           </Link>
 
           {/* Quick Nav Links according to Role */}
-          <div className="hidden lg:flex items-center gap-4 text-xs font-semibold text-slate-600">
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-4 text-xs font-semibold text-slate-600">
             {role === 'citizen' ? (
               <>
                 <Link
@@ -115,15 +115,18 @@ export default function Navbar() {
                 </Link>
               </>
             )}
-          </div>
+          </nav>
 
           {/* Quick Track Search Input */}
           <form
             onSubmit={handleTrackSubmit}
+            aria-label="Quick Complaint Tracker"
             className="hidden md:flex items-center max-w-xs w-full relative"
           >
             <input
               type="text"
+              name="navTrackingCode"
+              aria-label="Track complaint tracking code"
               placeholder="Track code (e.g. NS-KO0201)..."
               value={trackingInput}
               onChange={(e) => setTrackingInput(e.target.value)}
@@ -131,6 +134,7 @@ export default function Navbar() {
             />
             <button
               type="submit"
+              aria-label="Search tracking code"
               className="absolute right-1 top-1 bottom-1 px-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-[11px] font-semibold rounded-md transition-colors"
             >
               Track
@@ -139,9 +143,12 @@ export default function Navbar() {
 
           {/* Role Toggle with Demo Convenience Note */}
           <div className="flex flex-col items-end gap-0.5 shrink-0">
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+            <div role="tablist" aria-label="Role Switcher" className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
               <button
                 type="button"
+                role="tab"
+                aria-selected={role === 'citizen'}
+                aria-label="Switch to Citizen portal"
                 onClick={() => switchRole('citizen')}
                 className={`px-3 py-1 rounded-lg transition-all ${
                   role === 'citizen'
@@ -153,6 +160,9 @@ export default function Navbar() {
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={role === 'officer'}
+                aria-label="Switch to Officer portal"
                 onClick={() => switchRole('officer')}
                 className={`px-3 py-1 rounded-lg transition-all ${
                   role === 'officer'

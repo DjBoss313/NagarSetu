@@ -33,11 +33,14 @@ export default function TrackPage() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+            <label htmlFor="track-code-input" className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
               Tracking Code
             </label>
             <input
+              id="track-code-input"
+              name="trackingCode"
               type="text"
+              aria-label="Enter NagarSetu tracking code"
               placeholder="e.g. NS-KO0201"
               value={code}
               onChange={(e) => {
@@ -46,11 +49,12 @@ export default function TrackPage() {
               }}
               className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-mono text-lg font-bold text-slate-900 tracking-wider placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all uppercase"
             />
-            {error && <p className="text-xs text-red-600 mt-1.5 font-medium">{error}</p>}
+            {error && <p role="alert" className="text-xs text-red-600 mt-1.5 font-medium">{error}</p>}
           </div>
 
           <button
             type="submit"
+            aria-label="Submit tracking code to check status"
             className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold rounded-xl shadow-xs transition-colors text-sm"
           >
             Check Status & AI Analysis →

@@ -160,18 +160,22 @@ export default function CitizenSubmitPage() {
 
         {/* Issue Description */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+          <label htmlFor="issue-description" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
             Describe the Issue <span className="text-red-500">*</span>
           </label>
           <textarea
+            id="issue-description"
+            name="description"
             rows={3}
             required
+            aria-required="true"
+            aria-describedby="desc-hint"
             placeholder="e.g. Deep pothole damaging vehicles, uncovered manhole outside school gate, sparking electric wire..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
           />
-          <div className="flex justify-between items-center text-[11px] text-slate-400 mt-1">
+          <div id="desc-hint" className="flex justify-between items-center text-[11px] text-slate-400 mt-1">
             <span>Provide key details for municipal field crew.</span>
             <span>{description.length} chars</span>
           </div>
@@ -179,10 +183,12 @@ export default function CitizenSubmitPage() {
 
         {/* Category Dropdown */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+          <label htmlFor="issue-category" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
             Category
           </label>
           <select
+            id="issue-category"
+            name="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
@@ -197,15 +203,18 @@ export default function CitizenSubmitPage() {
 
         {/* Photo Upload */}
         <div className="pt-1 border-t border-slate-100">
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+          <label htmlFor="issue-photo" className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
             Photo Upload <span className="text-slate-400 font-normal">(Optional)</span>
           </label>
           <div className="flex items-center gap-4">
-            <label className="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors shrink-0">
+            <label htmlFor="issue-photo" className="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors shrink-0">
               <span>📷 Choose Photo</span>
               <input
+                id="issue-photo"
+                name="photo"
                 type="file"
                 accept="image/*"
+                aria-label="Upload photo of the civic issue"
                 onChange={handlePhotoChange}
                 className="hidden"
               />
@@ -214,13 +223,14 @@ export default function CitizenSubmitPage() {
               <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0 group">
                 <Image
                   src={previewUrl}
-                  alt="Upload preview"
+                  alt="Upload preview of civic complaint"
                   fill
                   className="object-cover"
                   unoptimized
                 />
                 <button
                   type="button"
+                  aria-label="Remove attached photo"
                   onClick={handleRemovePhoto}
                   className="absolute inset-0 bg-black/50 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                 >
@@ -237,11 +247,12 @@ export default function CitizenSubmitPage() {
         {/* Location Section with Leaflet Map */}
         <div className="flex flex-col gap-3 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            <label htmlFor="issue-address" className="text-xs font-bold uppercase tracking-wider text-slate-700">
               Pin Location on Map
             </label>
             <button
               type="button"
+              aria-label="Use current device GPS location"
               onClick={handleUseMyLocation}
               className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
             >
@@ -250,11 +261,12 @@ export default function CitizenSubmitPage() {
           </div>
 
           {/* Quick Area Presets */}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label="Bengaluru neighborhood presets">
             {BENGALURU_PRESETS.map((p) => (
               <button
                 key={p.name}
                 type="button"
+                aria-label={`Select location preset: ${p.name}`}
                 onClick={() => {
                   setAddress(p.address);
                   setLat(p.lat);
@@ -279,7 +291,10 @@ export default function CitizenSubmitPage() {
           />
 
           <input
+            id="issue-address"
+            name="address"
             type="text"
+            aria-label="Street address or landmark"
             placeholder="Street address or landmark..."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
@@ -288,24 +303,30 @@ export default function CitizenSubmitPage() {
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div>
-              <span className="text-[11px] text-slate-500 font-semibold block mb-1">
+              <label htmlFor="issue-latitude" className="text-[11px] text-slate-500 font-semibold block mb-1">
                 Latitude
-              </span>
+              </label>
               <input
+                id="issue-latitude"
+                name="lat"
                 type="number"
                 step="0.0001"
+                aria-label="Latitude coordinate"
                 value={lat}
                 onChange={(e) => setLat(parseFloat(e.target.value) || 0)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-mono text-slate-800 text-xs"
               />
             </div>
             <div>
-              <span className="text-[11px] text-slate-500 font-semibold block mb-1">
+              <label htmlFor="issue-longitude" className="text-[11px] text-slate-500 font-semibold block mb-1">
                 Longitude
-              </span>
+              </label>
               <input
+                id="issue-longitude"
+                name="lng"
                 type="number"
                 step="0.0001"
+                aria-label="Longitude coordinate"
                 value={lng}
                 onChange={(e) => setLng(parseFloat(e.target.value) || 0)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-mono text-slate-800 text-xs"

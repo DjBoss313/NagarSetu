@@ -31,8 +31,16 @@ export async function POST(request: NextRequest) {
 
       const photo = formData.get('photo') as File | null;
       if (photo && photo.size > 0 && photo.name) {
-        const ext = path.extname(photo.name) || '.jpg';
-        const safeName = `upload_${Date.now()}_${Math.random().toString(36).slice(2, 8)}${ext}`;
+        // Enforce 10MB file size limit
+        if (photo.size > 10 * 1024 * 1024) {
+          return NextResponse.json({ error: 'Photo exceeds maximum allowed size of 10MB.' }, { status: 400 });
+        }
+
+        const ext = path.extname(photo.name).toLowerCase() || '.jpg';
+        const allowedExts = ['.jpg', '.jpeg', '.png', '.webp'];
+        const safeExt = allowedExts.includes(ext) ? ext : '.jpg';
+
+        const safeName = `upload_${Date.now()}_${Math.random().toString(36).slice(2, 8)}${safeExt}`;
         const uploadsDir = path.join(process.cwd(), 'data', 'uploads');
         if (!fs.existsSync(uploadsDir)) {
           fs.mkdirSync(uploadsDir, { recursive: true });
@@ -52,11 +60,23 @@ export async function POST(request: NextRequest) {
       imagePath = json.image_path || null;
     }
 
+    // Input sanitization & coordinate bounds validation
+    if (isNaN(lat) || lat < -90 || lat > 90 || isNaN(lng) || lng < -180 || lng > 180) {
+      return NextResponse.json(
+        { error: 'Invalid coordinates: latitude must be between -90 and 90, longitude between -180 and 180.' },
+        { status: 400 }
+      );
+    }
+
     if (!description || description.trim().length < 5) {
       return NextResponse.json(
         { error: 'Description must be at least 5 characters long.' },
         { status: 400 }
       );
+    }
+
+    if (description.length > 2000) {
+      description = description.slice(0, 2000);
     }
 
     if (isNaN(lat) || isNaN(lng)) {
