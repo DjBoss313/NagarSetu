@@ -229,6 +229,14 @@ export default function OfficerGisMap({ reports, clusters }: OfficerGisMapProps)
       {/* Map Canvas */}
       <div className="relative w-full h-[600px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner z-0">
         <div ref={mapContainerRef} className="w-full h-full" />
+        {reports.length === 0 && (
+          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-2xs flex items-center justify-center pointer-events-none z-[500]">
+            <div className="bg-white/95 px-5 py-3 rounded-xl border border-slate-200 shadow-lg text-xs font-bold text-slate-800 flex items-center gap-2">
+              <span>📍</span>
+              <span>No complaints currently on file to plot.</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Selected Report Quick Banner (if clicked) */}

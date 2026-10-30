@@ -141,6 +141,10 @@ export default function CitizenSubmitPage() {
         <p className="text-sm text-slate-600 mt-1">
           Report potholes, broken streetlights, water leaks, or civic hazards in under a minute. Drop a map pin and attach an optional photo.
         </p>
+        <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-slate-100/90 px-3 py-1.5 rounded-lg border border-slate-200/80 w-fit mt-2 font-medium">
+          <span>ℹ️</span>
+          <span>Demo data may reset when the server restarts.</span>
+        </div>
       </div>
 
       {/* Submission Form */}

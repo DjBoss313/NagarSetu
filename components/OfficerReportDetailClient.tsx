@@ -606,6 +606,64 @@ export default function OfficerReportDetailClient({
           ))}
         </div>
       </section>
+
+      {/* Mocked Notification Log (PLAN.md Requirement) */}
+      <section className="bg-slate-900 text-slate-100 rounded-2xl p-6 border border-slate-800 shadow-sm flex flex-col gap-4">
+        <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-2">
+            <span className="text-base">📬</span>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+              Simulated Citizen Notification Log
+            </h2>
+          </div>
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+            Mocked: SMS/email would be sent
+          </span>
+        </div>
+
+        <p className="text-xs text-slate-400 leading-relaxed">
+          Simulates notifications triggered on every status or assignment change. No real SMS or email credentials required.
+        </p>
+
+        <div className="flex flex-col gap-2 font-mono text-xs">
+          {history.slice().reverse().map((h) => {
+            let smsMessage = `Would notify citizen: Your report ${report.tracking_code} is now ${h.to_status}.`;
+            if (h.to_status === 'Submitted') {
+              smsMessage = `Would notify citizen: Your complaint ${report.tracking_code} has been registered and queued for triage. Track live: /report/${report.tracking_code}`;
+            } else if (h.to_status === 'Assigned') {
+              smsMessage = `Would notify citizen: Your report ${report.tracking_code} is now Assigned to ${report.assignee || 'field maintenance crew'}.`;
+            } else if (h.to_status === 'In Progress') {
+              smsMessage = `Would notify citizen: Field crew has initiated on-site work for report ${report.tracking_code}.`;
+            } else if (h.to_status === 'Resolved') {
+              smsMessage = `Would notify citizen: Great news! Your report ${report.tracking_code} has been marked Resolved.`;
+            } else if (h.to_status === 'Merged') {
+              smsMessage = `Would notify citizen: Your report ${report.tracking_code} was consolidated with ongoing primary complaint.`;
+            }
+
+            return (
+              <div
+                key={h.id}
+                className="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+              >
+                <div className="flex items-start sm:items-center gap-2">
+                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-400/30 shrink-0">
+                    📱 SMS
+                  </span>
+                  <span className="text-slate-200 font-sans text-xs">
+                    {smsMessage}
+                  </span>
+                </div>
+                <span className="text-[10px] text-slate-400 shrink-0">
+                  {new Date(h.created_at).toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }

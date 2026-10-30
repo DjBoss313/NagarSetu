@@ -11,7 +11,7 @@ export default function Navbar() {
   const [trackingInput, setTrackingInput] = useState('');
 
   useEffect(() => {
-    // Read persisted role from localStorage
+    // Read persisted role from localStorage or cookie
     const savedRole = localStorage.getItem('nagarsetu_role') as 'citizen' | 'officer' | null;
     if (savedRole) {
       setRole(savedRole);
@@ -24,6 +24,7 @@ export default function Navbar() {
     setRole(newRole);
     localStorage.setItem('nagarsetu_role', newRole);
     document.cookie = `nagarsetu_role=${newRole}; path=/; max-age=31536000`;
+
     if (newRole === 'officer' && !pathname.startsWith('/officer')) {
       router.push('/officer');
     } else if (newRole === 'citizen' && pathname.startsWith('/officer')) {
@@ -41,16 +42,19 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+          <Link
+            href={role === 'officer' ? '/officer' : '/'}
+            className="flex items-center gap-2.5 shrink-0"
+          >
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 flex items-center justify-center text-white font-extrabold text-base shadow-2xs">
               NS
             </div>
             <div>
-              <span className="font-extrabold text-lg tracking-tight text-slate-900 block leading-tight">
+              <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 block leading-tight">
                 NagarSetu
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider text-blue-600 block leading-none">
@@ -59,7 +63,58 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Quick Track Input */}
+          {/* Quick Nav Links according to Role */}
+          <div className="hidden lg:flex items-center gap-4 text-xs font-semibold text-slate-600">
+            {role === 'citizen' ? (
+              <>
+                <Link
+                  href="/"
+                  className={`hover:text-blue-600 transition-colors ${
+                    pathname === '/' ? 'text-blue-600 font-bold' : ''
+                  }`}
+                >
+                  File Complaint
+                </Link>
+                <Link
+                  href="/track"
+                  className={`hover:text-blue-600 transition-colors ${
+                    pathname === '/track' ? 'text-blue-600 font-bold' : ''
+                  }`}
+                >
+                  Track Status
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/officer"
+                  className={`hover:text-blue-600 transition-colors ${
+                    pathname === '/officer' ? 'text-blue-600 font-bold' : ''
+                  }`}
+                >
+                  Triage List
+                </Link>
+                <Link
+                  href="/officer/map"
+                  className={`hover:text-blue-600 transition-colors ${
+                    pathname === '/officer/map' ? 'text-blue-600 font-bold' : ''
+                  }`}
+                >
+                  GIS Map
+                </Link>
+                <Link
+                  href="/officer/hotspots"
+                  className={`hover:text-blue-600 transition-colors ${
+                    pathname === '/officer/hotspots' ? 'text-blue-600 font-bold' : ''
+                  }`}
+                >
+                  Hotspot Briefs
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Quick Track Search Input */}
           <form
             onSubmit={handleTrackSubmit}
             className="hidden md:flex items-center max-w-xs w-full relative"
@@ -79,14 +134,13 @@ export default function Navbar() {
             </button>
           </form>
 
-          {/* Role Toggle Switch & Nav */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* Citizen / Officer Pill Toggle */}
+          {/* Role Toggle with Demo Convenience Note */}
+          <div className="flex flex-col items-end gap-0.5 shrink-0">
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => switchRole('citizen')}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
+                className={`px-3 py-1 rounded-lg transition-all ${
                   role === 'citizen'
                     ? 'bg-white text-blue-700 shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
@@ -97,7 +151,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => switchRole('officer')}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
+                className={`px-3 py-1 rounded-lg transition-all ${
                   role === 'officer'
                     ? 'bg-blue-600 text-white shadow-xs font-bold'
                     : 'text-slate-600 hover:text-slate-900'
@@ -106,17 +160,12 @@ export default function Navbar() {
                 Officer
               </button>
             </div>
-
-            {/* Mobile Track Link */}
-            <Link
-              href="/track"
-              className="md:hidden text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1"
-            >
-              Track
-            </Link>
+            <span className="text-[9px] text-slate-400 hidden sm:block">
+              Demo convenience: No auth required
+            </span>
           </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
