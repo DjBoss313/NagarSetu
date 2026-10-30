@@ -101,6 +101,12 @@ const CATEGORY_RULES: Record<Exclude<CivicCategory, 'Other'>, string[]> = {
   ],
 };
 
+/**
+ * Fast keyword pattern matching to map complaint text to one of the standard civic categories.
+ *
+ * @param text - Raw complaint text
+ * @returns Best matching CivicCategory, defaulting to 'Other' if no keywords match
+ */
 export function ruleBasedCategorize(text: string): CivicCategory {
   const lower = text.toLowerCase();
   let bestMatch: CivicCategory = 'Other';
@@ -131,6 +137,14 @@ export interface CategorizeResult {
   confidence: number;
 }
 
+/**
+ * Complete categorization pipeline: runs rule-based keyword matching first,
+ * with optional Gemini confirmation within a 5-second timeout.
+ *
+ * @param description - Complaint description
+ * @param userSelectedCategory - Category chosen by citizen if provided
+ * @returns CategorizeResult with final category, source ('llm' | 'fallback'), and confidence
+ */
 export async function categorizeComplaint(
   description: string,
   userSelectedCategory?: string | null

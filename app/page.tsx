@@ -1,5 +1,6 @@
 'use client';
 
+import { CIVIC_CATEGORIES } from '@/lib/ai/categorize';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -15,16 +16,6 @@ const LocationPickerMap = dynamic(() => import('@/components/LocationPickerMap')
     </div>
   ),
 });
-
-const CIVIC_CATEGORIES = [
-  'Roads & Potholes',
-  'Water & Sewage',
-  'Garbage & Sanitation',
-  'Electricity & Streetlights',
-  'Public Safety',
-  'Encroachment & Traffic',
-  'Other',
-];
 
 const BENGALURU_PRESETS = [
   { name: 'Koramangala (80 Feet Rd)', lat: 12.9358, lng: 77.6251, address: '80 Feet Road, Koramangala, Bengaluru' },

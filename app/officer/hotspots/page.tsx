@@ -1,6 +1,7 @@
 import OfficerNav from '@/components/OfficerNav';
 import { getDb } from '@/lib/db';
 import { Cluster, Report } from '@/lib/types';
+import { getNeighborhoodName } from '@/lib/ui';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -25,18 +26,6 @@ export default function OfficerHotspotsPage() {
   }
 
   const totalClusteredReports = clusters.reduce((acc, c) => acc + c.report_count, 0);
-
-  // Approximate area naming helper
-  const getNeighborhoodName = (lat: number, lng: number) => {
-    if (lat > 12.965 && lat < 12.975 && lng > 77.595 && lng < 77.61) return 'Central Bengaluru / Museum Rd';
-    if (lat > 12.975 && lat < 12.985 && lng > 77.635 && lng < 77.645) return 'Indiranagar (100 Feet Rd)';
-    if (lat > 12.93 && lat < 12.94 && lng > 77.62 && lng < 77.63) return 'Koramangala (80 Feet Rd)';
-    if (lat > 12.978 && lat < 12.986 && lng > 77.60 && lng < 77.61) return 'Shivajinagar / Bowring Hospital';
-    if (lat > 12.955 && lat < 12.965 && lng > 77.645 && lng < 77.655) return 'HAL Airport Road / Manipal';
-    if (lat > 12.995 && lat < 13.015 && lng > 77.565 && lng < 77.575) return 'Malleshwaram';
-    if (lat > 12.975 && lat < 12.99 && lng > 77.73 && lng < 77.76) return 'Whitefield Corridor';
-    return `Ward Area (${lat.toFixed(3)}, ${lng.toFixed(3)})`;
-  };
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">

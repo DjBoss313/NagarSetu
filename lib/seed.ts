@@ -14,6 +14,14 @@ interface SeedReportItem {
   days_ago: number;
 }
 
+/**
+ * Synchronously seeds the SQLite database with 45 realistic synthetic Bengaluru complaints
+ * if the reports table is currently empty.
+ *
+ * @param db - SQLite Database connection instance
+ * @param force - If true, re-seeds regardless of current row count
+ * @returns True if seeding occurred, false if skipped
+ */
 export function seedDatabaseSync(db: Database.Database, force = false): boolean {
   const countRow = db.prepare('SELECT count(*) as count FROM reports').get() as { count: number };
   if (!force && countRow.count > 0) {

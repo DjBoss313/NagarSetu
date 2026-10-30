@@ -1,7 +1,8 @@
 'use client';
 
 import { CIVIC_CATEGORIES } from '@/lib/ai/categorize';
-import { PriorityFactor, PriorityLabel, Report, REPORT_STATUSES, ReportStatus } from '@/lib/types';
+import { PriorityFactor, Report, REPORT_STATUSES } from '@/lib/types';
+import { formatDateIndian, getPriorityBadgeClass, getStatusBadgeClass } from '@/lib/ui';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
@@ -66,38 +67,6 @@ export default function OfficerDashboardClient({
       })
       .sort((a, b) => b.priority_score - a.priority_score);
   }, [initialReports, statusFilter, categoryFilter, priorityFilter, searchQuery]);
-
-  const getPriorityBadge = (label: PriorityLabel) => {
-    switch (label) {
-      case 'Critical':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'High':
-        return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'Medium':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      default:
-        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-    }
-  };
-
-  const getStatusBadge = (status: ReportStatus) => {
-    switch (status) {
-      case 'Resolved':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'In Progress':
-        return 'bg-indigo-50 text-indigo-700 border-indigo-200';
-      case 'Assigned':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'Under Review':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'Rejected':
-        return 'bg-red-50 text-red-700 border-red-200';
-      case 'Merged':
-        return 'bg-purple-50 text-purple-700 border-purple-200';
-      default:
-        return 'bg-slate-100 text-slate-700 border-slate-200';
-    }
-  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -345,14 +314,14 @@ export default function OfficerDashboardClient({
                         {report.category}
                       </span>
                       <span
-                        className={`font-bold px-2.5 py-0.5 rounded-md border ${getPriorityBadge(
+                        className={`font-bold px-2.5 py-0.5 rounded-md border ${getPriorityBadgeClass(
                           report.priority_label
                         )}`}
                       >
                         Score {report.priority_score} • {report.priority_label}
                       </span>
                       <span
-                        className={`font-semibold px-2 py-0.5 rounded-md border ${getStatusBadge(
+                        className={`font-semibold px-2 py-0.5 rounded-md border ${getStatusBadgeClass(
                           report.status
                         )}`}
                       >
@@ -384,10 +353,7 @@ export default function OfficerDashboardClient({
                         📍 {report.address || `${report.lat.toFixed(4)}, ${report.lng.toFixed(4)}`}
                       </span>
                       <span className="shrink-0 font-mono">
-                        {new Date(report.created_at).toLocaleDateString('en-IN', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
+                        {formatDateIndian(report.created_at)}
                       </span>
                       {report.assignee && (
                         <span className="shrink-0 font-semibold text-slate-700">

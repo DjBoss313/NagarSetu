@@ -10,6 +10,7 @@
  */
 
 import Database from 'better-sqlite3';
+import { generateTrackingCode } from '../tracking';
 import { Report, ReportStatus } from '../types';
 import { categorizeComplaint } from './categorize';
 import { updateClusters } from './cluster';
@@ -36,26 +37,16 @@ export interface PipelineResult {
   } | null;
 }
 
-export function generateTrackingCode(db: Database.Database): string {
-  const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let attempts = 0;
-  while (attempts < 100) {
-    attempts++;
-    let code = 'NS-';
-    for (let i = 0; i < 6; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    const existing = db
-      .prepare('SELECT id FROM reports WHERE tracking_code = ?')
-      .get(code);
-    if (!existing) {
-      return code;
-    }
-  }
-  // Fallback in rare collision scenario
-  return `NS-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-}
+export { generateTrackingCode };
 
+/**
+ * Synchronous AI triage and persistence pipeline executed during report submission.
+ * Enforces sequence: categorize -> summarize -> duplicates -> priority -> save & re-cluster.
+ *
+ * @param db - SQLite database handle
+ * @param input - Submission payload (description, category, lat, lng, address, imagePath)
+ * @returns PipelineResult with newly created Report and duplicateAlert if matched
+ */
 export async function processComplaintSubmission(
   db: Database.Database,
   input: SubmitReportInput

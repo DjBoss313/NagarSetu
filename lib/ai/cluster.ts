@@ -11,6 +11,14 @@ import { Cluster, Report } from '../types';
 import { calculateHaversineDistanceMeters } from './duplicates';
 import { callGemini } from './gemini';
 
+/**
+ * Formats a structured fallback Executive Action Brief for ward maintenance dispatch.
+ *
+ * @param reportCount - Number of complaints grouped in this cluster
+ * @param topCategories - Most prevalent complaint categories in the hotspot
+ * @param criticalCount - Number of critical priority safety hazards
+ * @returns Plain-language action brief string
+ */
 export function createFallbackActionBrief(
   reportCount: number,
   topCategories: string[],
@@ -25,6 +33,16 @@ export function createFallbackActionBrief(
   return `High-density cluster of ${reportCount} reports primarily affecting ${catSummary}, ${critNote}. Immediate priority: dispatch ward maintenance team to inspect high-risk sites and coordinate repair crew.`;
 }
 
+/**
+ * Generates an Executive Action Brief for ward officers: calls Gemini with a 5s deadline,
+ * falling back to createFallbackActionBrief if Gemini times out or is unconfigured.
+ *
+ * @param reportCount - Number of complaints in the cluster
+ * @param topCategories - Top categories represented
+ * @param criticalCount - Number of critical priority reports
+ * @param sampleDescriptions - Array of sample citizen complaint texts
+ * @returns Object with brief text and source ('llm' | 'fallback')
+ */
 export async function generateActionBrief(
   reportCount: number,
   topCategories: string[],

@@ -13,6 +13,15 @@ export interface SummarizeResult {
   source: 'llm' | 'fallback';
 }
 
+/**
+ * Produces a concise 1-2 sentence actionable executive summary.
+ * Uses Gemini if available within 5 seconds; otherwise uses a structured municipal template.
+ *
+ * @param description - Complaint text
+ * @param category - Complaint category
+ * @param address - Optional landmark or address
+ * @returns SummarizeResult containing summary text and source ('llm' | 'fallback')
+ */
 export async function summarizeComplaint(
   description: string,
   category: string,

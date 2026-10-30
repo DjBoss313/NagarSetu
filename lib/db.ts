@@ -31,6 +31,11 @@ declare global {
   var __nagarsetu_db: Database.Database | undefined;
 }
 
+/**
+ * Sets SQLite pragmas (WAL mode, foreign keys) and creates required tables (clusters, reports, status_history) and indexes.
+ *
+ * @param db - SQLite Database connection instance
+ */
 export function initDb(db: Database.Database): void {
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
@@ -99,6 +104,12 @@ export function initDb(db: Database.Database): void {
   `);
 }
 
+/**
+ * Singleton database accessor. Lazily creates required folders, opens nagarsetu.db,
+ * creates tables, and auto-seeds if the database is fresh.
+ *
+ * @returns Initialized SQLite Database instance
+ */
 export function getDb(): Database.Database {
   if (!global.__nagarsetu_db) {
     ensureDirectoriesExist();

@@ -1,6 +1,7 @@
 'use client';
 
-import { ALLOWED_STATUS_TRANSITIONS, PriorityFactor, PriorityLabel, Report, ReportStatus, StatusHistory } from '@/lib/types';
+import { ALLOWED_STATUS_TRANSITIONS, PriorityFactor, Report, ReportStatus, StatusHistory } from '@/lib/types';
+import { getPriorityBadgeClass } from '@/lib/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -160,19 +161,6 @@ export default function OfficerReportDetailClient({
       setErrorMessage(err instanceof Error ? err.message : 'Error processing duplicate');
     } finally {
       setIsProcessingDuplicate(false);
-    }
-  };
-
-  const getPriorityBadge = (label: PriorityLabel) => {
-    switch (label) {
-      case 'Critical':
-        return 'bg-red-50 text-red-700 border-red-200';
-      case 'High':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'Medium':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
-      default:
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
     }
   };
 
@@ -512,7 +500,7 @@ export default function OfficerReportDetailClient({
               <span className="text-xs text-slate-400">/ 100</span>
             </div>
 
-            <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${getPriorityBadge(report.priority_label)}`}>
+            <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${getPriorityBadgeClass(report.priority_label)}`}>
               {report.priority_label} Priority
             </span>
           </div>

@@ -80,6 +80,13 @@ export interface PriorityEvaluation {
   factors: PriorityFactor[];
 }
 
+/**
+ * Evaluates transparent priority score (0-100) and produces an itemized factor breakdown.
+ *
+ * @param report - Complaint data containing description, category, and GPS coordinates
+ * @param nearbyReports - Surrounding reports within the ward for duplicate density evaluation
+ * @returns PriorityEvaluation with clamped score [0, 100], label, and plain-language factor list
+ */
 export function evaluatePriority(
   report: {
     description: string;

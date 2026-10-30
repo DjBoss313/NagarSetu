@@ -14,6 +14,15 @@ const STOP_WORDS = new Set([
   'around', 'please', 'complaint', 'issue', 'problem', 'fix', 'help', 'very', 'too',
 ]);
 
+/**
+ * Calculates great-circle distance between two GPS coordinates using the Haversine formula.
+ *
+ * @param lat1 - Origin latitude in degrees
+ * @param lon1 - Origin longitude in degrees
+ * @param lat2 - Destination latitude in degrees
+ * @param lon2 - Destination longitude in degrees
+ * @returns Spatial distance in meters
+ */
 export function calculateHaversineDistanceMeters(
   lat1: number,
   lon1: number,
@@ -34,6 +43,12 @@ export function calculateHaversineDistanceMeters(
   return R * c;
 }
 
+/**
+ * Normalizes, strips punctuation, and extracts meaningful non-stopword tokens from text.
+ *
+ * @param text - Raw complaint description
+ * @returns Array of filtered lowercase word tokens
+ */
 export function tokenize(text: string): string[] {
   return text
     .toLowerCase()
@@ -42,6 +57,13 @@ export function tokenize(text: string): string[] {
     .filter((w) => w.length > 2 && !STOP_WORDS.has(w));
 }
 
+/**
+ * Computes Jaccard word token similarity overlap between two tokenized documents.
+ *
+ * @param tokensA - First token list
+ * @param tokensB - Second token list
+ * @returns Jaccard index between 0.0 (no overlap) and 1.0 (identical)
+ */
 export function computeTokenOverlap(tokensA: string[], tokensB: string[]): number {
   if (tokensA.length === 0 || tokensB.length === 0) return 0;
   const setA = new Set(tokensA);
@@ -54,6 +76,14 @@ export function computeTokenOverlap(tokensA: string[], tokensB: string[]): numbe
   return union === 0 ? 0 : intersection / union;
 }
 
+/**
+ * Computes TF-IDF cosine similarity between two tokenized documents relative to corpus frequencies.
+ *
+ * @param docA - Query document tokens
+ * @param docB - Target candidate document tokens
+ * @param corpusDocs - Background corpus token lists for inverse document frequency calculation
+ * @returns Cosine similarity between 0.0 and 1.0
+ */
 export function computeTfidfCosine(
   docA: string[],
   docB: string[],
@@ -108,6 +138,13 @@ export interface DuplicateMatch {
   matchedDescription: string;
 }
 
+/**
+ * Scans existing reports to detect geographic near-duplicates (< 150m and textual similarity).
+ *
+ * @param newReport - Incoming report details (description, category, lat, lng)
+ * @param existingReports - Array of existing reports in the municipal database
+ * @returns DuplicateMatch if a candidate exceeds the similarity threshold, otherwise null
+ */
 export function findNearDuplicate(
   newReport: { description: string; category: string; lat: number; lng: number },
   existingReports: Report[]
