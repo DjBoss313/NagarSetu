@@ -1,5 +1,5 @@
+import { processComplaintSubmission } from '@/lib/ai/pipeline';
 import { getDb } from '@/lib/db';
-import { generateTrackingCode } from '@/lib/tracking';
 import fs from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     const contentType = request.headers.get('content-type') || '';
     let description = '';
-    let category = 'Other';
+    let category: string | null = null;
     let lat = 12.9716;
     let lng = 77.5946;
     let address = '';
@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
     if (contentType.includes('multipart/form-data')) {
       const formData = await request.formData();
       description = (formData.get('description') as string) || '';
-      category = (formData.get('category') as string) || 'Other';
-      if (category === 'auto') category = 'Other';
+      category = (formData.get('category') as string) || null;
+      if (category === 'auto') category = null;
 
       const latVal = formData.get('lat');
       const lngVal = formData.get('lng');
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     } else {
       const json = await request.json();
       description = json.description || '';
-      category = json.category === 'auto' ? 'Other' : json.category || 'Other';
+      category = json.category === 'auto' ? null : json.category;
       if (json.lat) lat = parseFloat(json.lat);
       if (json.lng) lng = parseFloat(json.lng);
       address = json.address || '';
@@ -65,74 +65,31 @@ export async function POST(request: NextRequest) {
     }
 
     const db = getDb();
-    const trackingCode = generateTrackingCode(db);
 
-    const insertReportStmt = db.prepare(`
-      INSERT INTO reports (
-        tracking_code,
-        description,
-        image_path,
-        category,
-        user_category,
-        lat,
-        lng,
-        address,
-        status,
-        summary_source
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const insertHistoryStmt = db.prepare(`
-      INSERT INTO status_history (
-        report_id,
-        from_status,
-        to_status,
-        note,
-        actor
-      ) VALUES (?, ?, ?, ?, ?)
-    `);
-
-    let newReportId = 0;
-
-    const tx = db.transaction(() => {
-      const res = insertReportStmt.run(
-        trackingCode,
-        description.trim(),
-        imagePath,
-        category,
-        category,
-        lat,
-        lng,
-        address.trim() || null,
-        'Submitted',
-        'fallback'
-      );
-
-      newReportId = Number(res.lastInsertRowid);
-
-      insertHistoryStmt.run(
-        newReportId,
-        'Submitted',
-        'Submitted',
-        'Complaint registered via Citizen Portal',
-        'Citizen'
-      );
+    // Execute the complete synchronous AI Pipeline:
+    // categorize -> summarize -> duplicates -> priority -> persist -> re-cluster
+    const result = await processComplaintSubmission(db, {
+      description,
+      category,
+      lat,
+      lng,
+      address,
+      imagePath,
     });
-
-    tx();
 
     return NextResponse.json(
       {
         success: true,
-        tracking_code: trackingCode,
-        report_id: newReportId,
+        tracking_code: result.report.tracking_code,
+        report: result.report,
+        duplicate_alert: result.duplicateAlert,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error submitting report:', error);
+    console.error('Error in synchronous complaint pipeline:', error);
     return NextResponse.json(
-      { error: 'An unexpected error occurred while saving the report.' },
+      { error: 'An unexpected error occurred while processing the complaint.' },
       { status: 500 }
     );
   }

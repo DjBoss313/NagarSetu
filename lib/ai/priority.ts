@@ -49,28 +49,28 @@ const CATEGORY_BASE_SCORES: Record<string, number> = {
 const SEVERITY_PATTERNS: { regex: RegExp; points: number; reason: string }[] = [
   {
     regex: /(exposed|live wire|sparking|electric shock|transformer blast|hanging cable)/i,
-    points: 30,
-    reason: 'Exposed electrical hazard or live wire with electrocution risk',
+    points: 25,
+    reason: 'mentions exposed wire / live electrical hazard',
   },
   {
     regex: /(open manhole|missing manhole|deep pit|cave-in|gutter open)/i,
-    points: 30,
-    reason: 'Open manhole or unprotected pit posing severe pedestrian fall injury',
+    points: 25,
+    reason: 'mentions open manhole / deep pedestrian fall risk',
   },
   {
     regex: /(gas leak|fire|explosion|cylinder)/i,
-    points: 35,
-    reason: 'Critical toxic or fire hazard',
+    points: 30,
+    reason: 'mentions fire or toxic gas leak hazard',
   },
   {
     regex: /(flood|deep water|submerged|waterlogging|drain burst)/i,
     points: 20,
-    reason: 'Severe waterlogging / drainage overflow blocking passage',
+    reason: 'mentions severe flooding / waterlogging',
   },
   {
     regex: /(dangerous pothole|huge pothole|rim break|accident prone|deep crater)/i,
     points: 15,
-    reason: 'Severe roadway crater with high two-wheeler skid hazard',
+    reason: 'mentions severe road crater / skid hazard',
   },
 ];
 
@@ -98,7 +98,7 @@ export function evaluatePriority(
   factors.push({
     factor: 'Category Base Risk',
     points: basePoints,
-    reason: `Baseline municipal severity for ${report.category}`,
+    reason: `baseline risk for ${report.category}`,
   });
   totalScore += basePoints;
 
@@ -106,7 +106,7 @@ export function evaluatePriority(
   for (const pattern of SEVERITY_PATTERNS) {
     if (pattern.regex.test(report.description)) {
       factors.push({
-        factor: 'Hazard Detection',
+        factor: 'Severity Keywords',
         points: pattern.points,
         reason: pattern.reason,
       });
@@ -135,14 +135,14 @@ export function evaluatePriority(
 
   if (nearestSensitive) {
     factors.push({
-      factor: 'Sensitive Location Proximity',
+      factor: 'Sensitive Place Proximity',
       points: 20,
-      reason: `Within ${nearestSensitive.distance}m of ${nearestSensitive.place.name} (${nearestSensitive.place.type} [mocked])`,
+      reason: `within ${nearestSensitive.distance}m of ${nearestSensitive.place.name} (${nearestSensitive.place.type} [mocked])`,
     });
     totalScore += 20;
   }
 
-  // 4. Neighborhood Incident Density (< 150m)
+  // 4. Nearby Density / Duplicates (< 150m)
   const activeNearby = nearbyReports.filter((r) => {
     if (r.status === 'Resolved' || r.status === 'Rejected') return false;
     const dist = calculateHaversineDistanceMeters(report.lat, report.lng, r.lat, r.lng);
@@ -151,16 +151,16 @@ export function evaluatePriority(
 
   if (activeNearby.length >= 2) {
     factors.push({
-      factor: 'Neighborhood Hotspot Density',
+      factor: 'Nearby Duplicate Density',
       points: 20,
-      reason: `${activeNearby.length} other active civic issues concentrated within 150m`,
+      reason: `${activeNearby.length} other active reports in immediate 150m vicinity`,
     });
     totalScore += 20;
   } else if (activeNearby.length === 1) {
     factors.push({
-      factor: 'Repeat Neighborhood Issue',
+      factor: 'Nearby Duplicate Count',
       points: 10,
-      reason: `1 other active report registered in immediate 150m vicinity`,
+      reason: `1 other active report in immediate 150m vicinity`,
     });
     totalScore += 10;
   }
@@ -173,16 +173,16 @@ export function evaluatePriority(
 
     if (ageDays >= 7) {
       factors.push({
-        factor: 'Aging Unresolved Report',
+        factor: 'Report Age',
         points: 20,
-        reason: `Complaint has remained unaddressed for ${Math.floor(ageDays)} days`,
+        reason: `unaddressed for ${Math.floor(ageDays)} days (escalated)`,
       });
       totalScore += 20;
     } else if (ageDays >= 3) {
       factors.push({
-        factor: 'Aging Unresolved Report',
+        factor: 'Report Age',
         points: 10,
-        reason: `Complaint has remained unaddressed for ${Math.floor(ageDays)} days`,
+        reason: `unaddressed for ${Math.floor(ageDays)} days`,
       });
       totalScore += 10;
     }
