@@ -1,0 +1,407 @@
+[
+  {
+    "tracking_code": "NS-MG0101",
+    "description": "Open deep manhole without cover outside school gate on Museum Road posing fatal fall risk.",
+    "category": "Public Safety",
+    "address": "Museum Road, near St. Joseph's School, Bengaluru",
+    "lat": 12.9721,
+    "lng": 77.6012,
+    "days_ago": 6
+  },
+  {
+    "tracking_code": "NS-MG0102",
+    "description": "Exposed live electrical wire hanging from pole near bus stop, sparking in rain.",
+    "category": "Electricity & Streetlights",
+    "address": "Museum Road, near St. Joseph's Gate, Bengaluru",
+    "lat": 12.9723,
+    "lng": 77.6014,
+    "days_ago": 5
+  },
+  {
+    "tracking_code": "NS-MG0103",
+    "description": "Broken streetlight flickering violently on Museum Road leaving junction dark.",
+    "category": "Electricity & Streetlights",
+    "address": "Museum Road junction, Bengaluru",
+    "lat": 12.9718,
+    "lng": 77.6008,
+    "days_ago": 8
+  },
+  {
+    "tracking_code": "NS-MG0104",
+    "description": "Footpath blocked by construction debris and tar gravel, pedestrians forced onto road.",
+    "category": "Encroachment & Traffic",
+    "address": "Museum Road 2nd cross, Bengaluru",
+    "lat": 12.9725,
+    "lng": 77.6018,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-KO0201",
+    "description": "Huge dangerous pothole near Sony World signal Koramangala damaging 2-wheelers and scooters.",
+    "category": "Roads & Potholes",
+    "address": "80 Feet Road near Sony World signal, Koramangala, Bengaluru",
+    "lat": 12.9358,
+    "lng": 77.6251,
+    "days_ago": 9
+  },
+  {
+    "tracking_code": "NS-KO0202",
+    "description": "Deep pothole on 80 feet road near Sony World junction, tires getting punctured and bikes skidding.",
+    "category": "Roads & Potholes",
+    "address": "80 Feet Road, opposite Sony World, Koramangala, Bengaluru",
+    "lat": 12.9360,
+    "lng": 77.6254,
+    "days_ago": 2
+  },
+  {
+    "tracking_code": "NS-KO0203",
+    "description": "Sewage water leak overflowing from drain near Koramangala Bus Station.",
+    "category": "Water & Sewage",
+    "address": "80 Feet Road, Koramangala Bus Station, Bengaluru",
+    "lat": 12.9351,
+    "lng": 77.6188,
+    "days_ago": 7
+  },
+  {
+    "tracking_code": "NS-KO0204",
+    "description": "Malfunctioning traffic signal at 80 Feet Road junction creating massive gridlock.",
+    "category": "Encroachment & Traffic",
+    "address": "80 Feet Road & 100 Feet Road Junction, Koramangala, Bengaluru",
+    "lat": 12.9355,
+    "lng": 77.6248,
+    "days_ago": 1
+  },
+  {
+    "tracking_code": "NS-IN0301",
+    "description": "Overflowing garbage dump near KFC on 100 feet road stinking badly and spreading on road.",
+    "category": "Garbage & Sanitation",
+    "address": "100 Feet Road near KFC, Indiranagar, Bengaluru",
+    "lat": 12.9782,
+    "lng": 77.6391,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-IN0302",
+    "description": "Garbage piled up on corner of 100 ft road near KFC Indiranagar, blocking footpath and smelling terribly.",
+    "category": "Garbage & Sanitation",
+    "address": "100 Feet Road & 12th Main Corner, Indiranagar, Bengaluru",
+    "lat": 12.9785,
+    "lng": 77.6394,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-IN0303",
+    "description": "Broken storm water drain slab near Indiranagar Metro Station creating hazard for commuters.",
+    "category": "Water & Sewage",
+    "address": "CMH Road, opposite Metro Pillar 42, Indiranagar, Bengaluru",
+    "lat": 12.9787,
+    "lng": 77.6384,
+    "days_ago": 11
+  },
+  {
+    "tracking_code": "NS-IN0304",
+    "description": "Illegal roadside hawkers encroaching pedestrian sidewalk outside Indiranagar Metro exit.",
+    "category": "Encroachment & Traffic",
+    "address": "CMH Road, Metro Exit B, Indiranagar, Bengaluru",
+    "lat": 12.9783,
+    "lng": 77.6388,
+    "days_ago": 2
+  },
+  {
+    "tracking_code": "NS-SH0401",
+    "description": "Dirty contaminated drinking water supplied in Bowring Hospital ward road area.",
+    "category": "Water & Sewage",
+    "address": "Lady Curzon Road, near Bowring Hospital, Shivajinagar, Bengaluru",
+    "lat": 12.9828,
+    "lng": 77.6048,
+    "days_ago": 10
+  },
+  {
+    "tracking_code": "NS-SH0402",
+    "description": "Severe garbage burning at corner of hospital compound causing suffocating smoke.",
+    "category": "Garbage & Sanitation",
+    "address": "Hospital Road, Shivajinagar, Bengaluru",
+    "lat": 12.9822,
+    "lng": 77.6042,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-SH0403",
+    "description": "Commercial auto rickshaws blocking ambulance emergency driveway entrance.",
+    "category": "Encroachment & Traffic",
+    "address": "Bowring Hospital Emergency Gate, Shivajinagar, Bengaluru",
+    "lat": 12.9826,
+    "lng": 77.6046,
+    "days_ago": 1
+  },
+  {
+    "tracking_code": "NS-ML0501",
+    "description": "Fallen tree branch hanging over high-tension electricity lines on 8th Cross.",
+    "category": "Electricity & Streetlights",
+    "address": "8th Cross, Sampige Road, Malleshwaram, Bengaluru",
+    "lat": 13.0032,
+    "lng": 77.5705,
+    "days_ago": 5
+  },
+  {
+    "tracking_code": "NS-ML0502",
+    "description": "Huge crater in road middle near KC General Hospital entrance.",
+    "category": "Roads & Potholes",
+    "address": "5th Cross Road, near KC General Hospital, Malleshwaram, Bengaluru",
+    "lat": 12.9988,
+    "lng": 77.5715,
+    "days_ago": 8
+  },
+  {
+    "tracking_code": "NS-ML0503",
+    "description": "Open sewer line leaking foul black water near Kendriya Vidyalaya school boundary.",
+    "category": "Water & Sewage",
+    "address": "18th Cross, Malleshwaram, Bengaluru",
+    "lat": 13.0078,
+    "lng": 77.5688,
+    "days_ago": 12
+  },
+  {
+    "tracking_code": "NS-WF0601",
+    "description": "Severe waterlogging on Whitefield main road after rain, vehicles getting submerged.",
+    "category": "Water & Sewage",
+    "address": "Whitefield Main Road near Hope Farm junction, Bengaluru",
+    "lat": 12.9842,
+    "lng": 77.7512,
+    "days_ago": 6
+  },
+  {
+    "tracking_code": "NS-WF0602",
+    "description": "Deep road cave-in and broken asphalt near ITPL entrance.",
+    "category": "Roads & Potholes",
+    "address": "ITPL Main Road, Whitefield, Bengaluru",
+    "lat": 12.9865,
+    "lng": 77.7420,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-WF0603",
+    "description": "Street lights not working for last 2 weeks on Graphite India road stretch.",
+    "category": "Electricity & Streetlights",
+    "address": "Graphite India Main Road, Whitefield, Bengaluru",
+    "lat": 12.9792,
+    "lng": 77.7125,
+    "days_ago": 14
+  },
+  {
+    "tracking_code": "NS-BL0701",
+    "description": "Heavy plastic waste and unsegregated wet garbage dumped near Bellandur lake gate.",
+    "category": "Garbage & Sanitation",
+    "address": "Bellandur Lake Road, Outer Ring Road, Bengaluru",
+    "lat": 12.9372,
+    "lng": 77.6710,
+    "days_ago": 7
+  },
+  {
+    "tracking_code": "NS-BL0702",
+    "description": "Dangerous pothole cluster on service road towards EcoSpace tech park.",
+    "category": "Roads & Potholes",
+    "address": "Outer Ring Road Service Road, Bellandur, Bengaluru",
+    "lat": 12.9265,
+    "lng": 77.6835,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-BL0703",
+    "description": "Pedestrian foot overbridge lift out of order for elderly and disabled citizens.",
+    "category": "Public Safety",
+    "address": "Bellandur Central Foot Overbridge, Bengaluru",
+    "lat": 12.9288,
+    "lng": 77.6812,
+    "days_ago": 10
+  },
+  {
+    "tracking_code": "NS-JP0801",
+    "description": "Overhead telecom wires dangling down to head height on 24th Main Road.",
+    "category": "Electricity & Streetlights",
+    "address": "24th Main Road, JP Nagar 5th Phase, Bengaluru",
+    "lat": 12.9082,
+    "lng": 77.5895,
+    "days_ago": 2
+  },
+  {
+    "tracking_code": "NS-JP0802",
+    "description": "Water pipeline burst creating artificial fountain and flooding road.",
+    "category": "Water & Sewage",
+    "address": "15th Cross Road, JP Nagar 2nd Phase, Bengaluru",
+    "lat": 12.9125,
+    "lng": 77.5842,
+    "days_ago": 1
+  },
+  {
+    "tracking_code": "NS-JY0901",
+    "description": "Missing drainage grating in front of shopping complex, someone fell yesterday.",
+    "category": "Public Safety",
+    "address": "4th Block Jayanagar 11th Main, Bengaluru",
+    "lat": 12.9298,
+    "lng": 77.5832,
+    "days_ago": 8
+  },
+  {
+    "tracking_code": "NS-JY0902",
+    "description": "Construction cement mixer permanently parked occupying half the carriageway.",
+    "category": "Encroachment & Traffic",
+    "address": "9th Main Road, Jayanagar 3rd Block, Bengaluru",
+    "lat": 12.9342,
+    "lng": 77.5855,
+    "days_ago": 6
+  },
+  {
+    "tracking_code": "NS-HA1001",
+    "description": "Ambulance lane blocked by illegal roadside cab parking outside Manipal Hospital.",
+    "category": "Encroachment & Traffic",
+    "address": "HAL Old Airport Road, opposite Manipal Hospital, Bengaluru",
+    "lat": 12.9588,
+    "lng": 77.6488,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-HA1002",
+    "description": "Drainage chamber overflowing into hospital driveway spreading foul stench.",
+    "category": "Water & Sewage",
+    "address": "HAL Old Airport Road, Manipal Hospital Gate 2, Bengaluru",
+    "lat": 12.9582,
+    "lng": 77.6482,
+    "days_ago": 5
+  },
+  {
+    "tracking_code": "NS-HA1003",
+    "description": "Dead streetlights outside hospital making pedestrian crossing dangerous at night.",
+    "category": "Electricity & Streetlights",
+    "address": "HAL Airport Road Pedestrian Crossing, Bengaluru",
+    "lat": 12.9586,
+    "lng": 77.6491,
+    "days_ago": 9
+  },
+  {
+    "tracking_code": "NS-CR1101",
+    "description": "Open transformer fencing broken with children playing in immediate proximity.",
+    "category": "Electricity & Streetlights",
+    "address": "Commercial Street, near Dispensary Road, Bengaluru",
+    "lat": 12.9818,
+    "lng": 77.6085,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-CR1102",
+    "description": "Garbage dump accumulating behind street shops attracting stray dogs.",
+    "category": "Garbage & Sanitation",
+    "address": "Dispensary Road lane, Commercial Street area, Bengaluru",
+    "lat": 12.9815,
+    "lng": 77.6088,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-CR1103",
+    "description": "Cobblestone pathway dislodged and sunken, tripping elderly shoppers.",
+    "category": "Roads & Potholes",
+    "address": "Commercial Street Main Boulevard, Bengaluru",
+    "lat": 12.9822,
+    "lng": 77.6082,
+    "days_ago": 6
+  },
+  {
+    "tracking_code": "NS-RT1201",
+    "description": "Road caved in near storm water canal after heavy rainfall.",
+    "category": "Roads & Potholes",
+    "address": "RT Nagar Main Road, near post office, Bengaluru",
+    "lat": 13.0235,
+    "lng": 77.5945,
+    "days_ago": 5
+  },
+  {
+    "tracking_code": "NS-RT1202",
+    "description": "Sewage pipeline clogged, dirty backflow entering residential basements.",
+    "category": "Water & Sewage",
+    "address": "Dinnur Main Road, RT Nagar, Bengaluru",
+    "lat": 13.0210,
+    "lng": 77.5920,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-BA1301",
+    "description": "High-mast lighting tower non-functional at Banashankari bus terminus.",
+    "category": "Electricity & Streetlights",
+    "address": "Banashankari TTMC Bus Terminus, Bengaluru",
+    "lat": 12.9155,
+    "lng": 77.5735,
+    "days_ago": 7
+  },
+  {
+    "tracking_code": "NS-BA1302",
+    "description": "Large garbage heap on footpath outside Banashankari temple gate.",
+    "category": "Garbage & Sanitation",
+    "address": "Kanakapura Road, Banashankari, Bengaluru",
+    "lat": 12.9172,
+    "lng": 77.5748,
+    "days_ago": 2
+  },
+  {
+    "tracking_code": "NS-EJ1401",
+    "description": "Deep water ponding near Ejipura signal stalling smaller vehicles.",
+    "category": "Water & Sewage",
+    "address": "Intermediate Ring Road, Ejipura Signal, Bengaluru",
+    "lat": 12.9412,
+    "lng": 77.6295,
+    "days_ago": 4
+  },
+  {
+    "tracking_code": "NS-EJ1402",
+    "description": "Unfinished flyover pillar area filled with stagnant water and mosquito breeding.",
+    "category": "Public Safety",
+    "address": "Ejipura Flyover corridor, Bengaluru",
+    "lat": 12.9425,
+    "lng": 77.6288,
+    "days_ago": 13
+  },
+  {
+    "tracking_code": "NS-DO1501",
+    "description": "Transformer blast sparks fell on parked scooter, dangerous spark continuing.",
+    "category": "Electricity & Streetlights",
+    "address": "100 Feet Road, Domlur 2nd Stage, Bengaluru",
+    "lat": 12.9625,
+    "lng": 77.6385,
+    "days_ago": 1
+  },
+  {
+    "tracking_code": "NS-DO1502",
+    "description": "Potholes right in middle of flyover ramp creating high speed accident hazard.",
+    "category": "Roads & Potholes",
+    "address": "Domlur Flyover up-ramp towards Airport Road, Bengaluru",
+    "lat": 12.9615,
+    "lng": 77.6372,
+    "days_ago": 8
+  },
+  {
+    "tracking_code": "NS-HE1601",
+    "description": "Fallen tree blocking entire lane towards Hebbal flyover entrance.",
+    "category": "Public Safety",
+    "address": "Bellary Road near Hebbal police station, Bengaluru",
+    "lat": 13.0358,
+    "lng": 77.5912,
+    "days_ago": 3
+  },
+  {
+    "tracking_code": "NS-HE1602",
+    "description": "Broken road divider with exposed iron rods puncturing car tires.",
+    "category": "Roads & Potholes",
+    "address": "Outer Ring Road Hebbal junction, Bengaluru",
+    "lat": 13.0372,
+    "lng": 77.5925,
+    "days_ago": 5
+  },
+  {
+    "tracking_code": "NS-MG1701",
+    "description": "Stagnant drain water overflowing across Brigade Road pavement.",
+    "category": "Water & Sewage",
+    "address": "Brigade Road, opposite Rex theatre location, Bengaluru",
+    "lat": 12.9735,
+    "lng": 77.6072,
+    "days_ago": 2
+  }
+]

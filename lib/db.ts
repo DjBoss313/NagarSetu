@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
+import { seedDatabaseSync } from './seed';
 
 /**
  * SQLite database helper for NagarSetu.
@@ -104,6 +105,7 @@ export function getDb(): Database.Database {
     ensureDirectoriesExist();
     const db = new Database(DB_PATH);
     initDb(db);
+    seedDatabaseSync(db);
     global.__nagarsetu_db = db;
   }
   return global.__nagarsetu_db;

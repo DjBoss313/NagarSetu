@@ -1,0 +1,74 @@
+[
+  {
+    "id": "sp-1",
+    "name": "St. Joseph's Boys' High School (Museum Road)",
+    "type": "School",
+    "lat": 12.9719,
+    "lng": 77.6010,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-2",
+    "name": "Bowring and Lady Curzon Hospital (Shivajinagar)",
+    "type": "Hospital",
+    "lat": 12.9825,
+    "lng": 77.6045,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-3",
+    "name": "National Public School (Koramangala 4th Block)",
+    "type": "School",
+    "lat": 12.9345,
+    "lng": 77.6245,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-4",
+    "name": "Manipal Hospital (HAL Old Airport Road)",
+    "type": "Hospital",
+    "lat": 12.9585,
+    "lng": 77.6485,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-5",
+    "name": "Indiranagar Metro Station (CMH Road)",
+    "type": "Transit Hub",
+    "lat": 12.9784,
+    "lng": 77.6386,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-6",
+    "name": "Koramangala Bus Station (80 Feet Road)",
+    "type": "Transit Hub",
+    "lat": 12.9352,
+    "lng": 77.6185,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-7",
+    "name": "Kendriya Vidyalaya (Malleshwaram 18th Cross)",
+    "type": "School",
+    "lat": 13.0075,
+    "lng": 77.5685,
+    "radius_m": 200,
+    "is_mocked": true
+  },
+  {
+    "id": "sp-8",
+    "name": "KC General Hospital (Malleshwaram)",
+    "type": "Hospital",
+    "lat": 12.9985,
+    "lng": 77.5712,
+    "radius_m": 200,
+    "is_mocked": true
+  }
+]
