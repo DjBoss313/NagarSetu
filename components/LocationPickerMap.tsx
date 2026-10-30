@@ -80,6 +80,7 @@ export default function LocationPickerMap({
       mapRef.current = null;
       markerRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run once on mount
 
   // Sync map center & marker when props change externally (presets or GPS)

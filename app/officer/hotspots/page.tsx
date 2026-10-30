@@ -3,7 +3,7 @@ import { getDb } from '@/lib/db';
 import { Cluster, Report } from '@/lib/types';
 import Link from 'next/link';
 
-export const instant = false;
+export const dynamic = 'force-dynamic';
 
 export default function OfficerHotspotsPage() {
   const db = getDb();

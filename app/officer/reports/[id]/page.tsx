@@ -4,7 +4,7 @@ import { getDb } from '@/lib/db';
 import { Report, StatusHistory } from '@/lib/types';
 import { notFound } from 'next/navigation';
 
-export const instant = false;
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ id: string }>;

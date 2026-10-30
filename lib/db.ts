@@ -28,7 +28,6 @@ function ensureDirectoriesExist(): void {
 
 // Preserve connection instance across HMR in development
 declare global {
-  // eslint-disable-next-line no-var
   var __nagarsetu_db: Database.Database | undefined;
 }
 

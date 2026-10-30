@@ -3,7 +3,7 @@ import { PriorityFactor, PriorityLabel, Report, StatusHistory } from '@/lib/type
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const instant = false;
+export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: Promise<{ trackingCode: string }>;

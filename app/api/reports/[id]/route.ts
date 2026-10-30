@@ -2,6 +2,8 @@ import { getDb } from '@/lib/db';
 import { isValidStatusTransition, Report, ReportStatus } from '@/lib/types';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 interface Params {
   params: Promise<{ id: string }>;
 }

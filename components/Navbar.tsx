@@ -13,11 +13,14 @@ export default function Navbar() {
   useEffect(() => {
     // Read persisted role from localStorage or cookie
     const savedRole = localStorage.getItem('nagarsetu_role') as 'citizen' | 'officer' | null;
-    if (savedRole) {
-      setRole(savedRole);
-    } else if (pathname.startsWith('/officer')) {
-      setRole('officer');
-    }
+    const timer = setTimeout(() => {
+      if (savedRole) {
+        setRole(savedRole);
+      } else if (pathname.startsWith('/officer')) {
+        setRole('officer');
+      }
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   const switchRole = (newRole: 'citizen' | 'officer') => {

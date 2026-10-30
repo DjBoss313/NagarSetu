@@ -3,7 +3,7 @@ import OfficerNav from '@/components/OfficerNav';
 import { getDb } from '@/lib/db';
 import { Report } from '@/lib/types';
 
-export const instant = false;
+export const dynamic = 'force-dynamic';
 
 export default function OfficerDashboardPage() {
   const db = getDb();

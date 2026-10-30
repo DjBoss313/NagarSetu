@@ -1,6 +1,6 @@
 'use client';
 
-import { ALLOWED_STATUS_TRANSITIONS, PriorityFactor, PriorityLabel, Report, REPORT_STATUSES, ReportStatus, StatusHistory } from '@/lib/types';
+import { ALLOWED_STATUS_TRANSITIONS, PriorityFactor, PriorityLabel, Report, ReportStatus, StatusHistory } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
