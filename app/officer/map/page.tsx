@@ -6,13 +6,20 @@ import { Cluster, Report } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 export default function OfficerMapPage() {
-  const db = getDb();
+  let reports: Report[] = [];
+  let clusters: Cluster[] = [];
+  let dbError: string | null = null;
 
-  const reports = db
-    .prepare('SELECT * FROM reports ORDER BY priority_score DESC')
-    .all() as Report[];
-
-  const clusters = db.prepare('SELECT * FROM clusters').all() as Cluster[];
+  try {
+    const db = getDb();
+    reports = db
+      .prepare('SELECT * FROM reports ORDER BY priority_score DESC')
+      .all() as Report[];
+    clusters = db.prepare('SELECT * FROM clusters').all() as Cluster[];
+  } catch (err: unknown) {
+    console.error('Failed to load map data on Officer Map page:', err);
+    dbError = err instanceof Error ? err.message : String(err);
+  }
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
@@ -27,7 +34,19 @@ export default function OfficerMapPage() {
           </p>
         </div>
 
-        <OfficerMapWrapper reports={reports} clusters={clusters} />
+        {dbError ? (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-red-900 flex flex-col gap-3">
+            <div className="flex items-center gap-2 font-bold text-red-800">
+              <span className="text-xl">⚠️</span>
+              <span>Database Connection Error</span>
+            </div>
+            <p className="text-sm font-mono bg-white p-3 rounded-lg border border-red-100 overflow-x-auto">
+              {dbError}
+            </p>
+          </div>
+        ) : (
+          <OfficerMapWrapper reports={reports} clusters={clusters} />
+        )}
       </main>
     </div>
   );

@@ -6,16 +6,22 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default function OfficerHotspotsPage() {
-  const db = getDb();
-
-  const clusters = db.prepare('SELECT * FROM clusters ORDER BY report_count DESC').all() as Cluster[];
-
-  // Fetch all reports in clusters
+  let clusters: Cluster[] = [];
   const reportsByCluster: Record<number, Report[]> = {};
-  for (const c of clusters) {
-    reportsByCluster[c.id] = db
-      .prepare('SELECT * FROM reports WHERE cluster_id = ? ORDER BY priority_score DESC')
-      .all(c.id) as Report[];
+  let dbError: string | null = null;
+
+  try {
+    const db = getDb();
+    clusters = db.prepare('SELECT * FROM clusters ORDER BY report_count DESC').all() as Cluster[];
+
+    for (const c of clusters) {
+      reportsByCluster[c.id] = db
+        .prepare('SELECT * FROM reports WHERE cluster_id = ? ORDER BY priority_score DESC')
+        .all(c.id) as Report[];
+    }
+  } catch (err: unknown) {
+    console.error('Failed to load clusters on Hotspots page:', err);
+    dbError = err instanceof Error ? err.message : String(err);
   }
 
   const totalClusteredReports = clusters.reduce((acc, c) => acc + c.report_count, 0);
@@ -45,6 +51,18 @@ export default function OfficerHotspotsPage() {
             Spatial groups of 3+ complaints within ~300 meters, automatically synthesized into actionable dispatch briefs for ward field officers.
           </p>
         </div>
+
+        {dbError && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-red-900 flex flex-col gap-3">
+            <div className="flex items-center gap-2 font-bold text-red-800">
+              <span className="text-xl">⚠️</span>
+              <span>Database Connection Error</span>
+            </div>
+            <p className="text-sm font-mono bg-white p-3 rounded-lg border border-red-100 overflow-x-auto">
+              {dbError}
+            </p>
+          </div>
+        )}
 
         {/* Metrics Overview */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
