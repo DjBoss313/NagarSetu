@@ -1,60 +1,44 @@
 'use client';
 
-import { CIVIC_CATEGORIES } from '@/lib/ai/categorize';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-// Location presets for demo testing around Bengaluru
+// Leaflet map dynamically imported with ssr: false per PLAN.md
+const LocationPickerMap = dynamic(() => import('@/components/LocationPickerMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-64 sm:h-72 rounded-xl bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-2 border border-slate-200 animate-pulse">
+      <span className="text-xl">🗺️</span>
+      <span className="text-xs font-medium">Loading interactive OpenStreetMap...</span>
+    </div>
+  ),
+});
+
+const CIVIC_CATEGORIES = [
+  'Roads & Potholes',
+  'Water & Sewage',
+  'Garbage & Sanitation',
+  'Electricity & Streetlights',
+  'Public Safety',
+  'Encroachment & Traffic',
+  'Other',
+];
+
 const BENGALURU_PRESETS = [
-  { name: 'Koramangala (80 Feet Road)', lat: 12.9358, lng: 77.6251, address: '80 Feet Road, Koramangala, Bengaluru' },
-  { name: 'Indiranagar (100 Feet Road)', lat: 12.9783, lng: 77.6392, address: '100 Feet Road, Indiranagar, Bengaluru' },
-  { name: 'Museum Road (MG Road area)', lat: 12.9721, lng: 77.6012, address: 'Museum Road, Central Bengaluru' },
+  { name: 'Koramangala (80 Feet Rd)', lat: 12.9358, lng: 77.6251, address: '80 Feet Road, Koramangala, Bengaluru' },
+  { name: 'Indiranagar (100 Feet Rd)', lat: 12.9783, lng: 77.6392, address: '100 Feet Road, Indiranagar, Bengaluru' },
+  { name: 'MG Road (Museum Road)', lat: 12.9721, lng: 77.6012, address: 'Museum Road, Central Bengaluru' },
   { name: 'Malleshwaram (8th Cross)', lat: 13.0032, lng: 77.5705, address: '8th Cross, Malleshwaram, Bengaluru' },
   { name: 'Whitefield (Hope Farm)', lat: 12.9842, lng: 77.7512, address: 'Whitefield Main Road, Bengaluru' },
 ];
 
-// Presets specifically crafted for judge evaluation of AI pipeline
-const JUDGE_DEMO_PRESETS = [
-  {
-    label: '🚨 Open Manhole near School',
-    desc: 'Deep open manhole without cover outside St. Joseph School gate, severe pedestrian and student fall hazard.',
-    cat: 'Public Safety',
-    lat: 12.9721,
-    lng: 77.6012,
-    address: 'Museum Road near St. Joseph School, Bengaluru',
-  },
-  {
-    label: '⚡ Exposed Sparking Wire',
-    desc: 'Exposed live electrical cable dangling from street pole near bus stop, sparking dangerously in rain.',
-    cat: 'Electricity & Streetlights',
-    lat: 12.9723,
-    lng: 77.6014,
-    address: 'Museum Road Bus Stop, Bengaluru',
-  },
-  {
-    label: '🔄 Duplicate: Pothole near Sony World',
-    desc: 'Huge deep pothole on 80 feet road near Sony World signal, tires puncturing and vehicles swerving dangerously.',
-    cat: 'Roads & Potholes',
-    lat: 12.9359,
-    lng: 77.6252,
-    address: '80 Feet Road near Sony World signal, Koramangala, Bengaluru',
-  },
-  {
-    label: '🗑️ Duplicate: Garbage near KFC 100ft Rd',
-    desc: 'Massive garbage pile overflowing on corner near KFC Indiranagar, blocking pedestrian walkway and stinking.',
-    cat: 'Garbage & Sanitation',
-    lat: 12.9784,
-    lng: 77.6393,
-    address: '100 Feet Road near KFC, Indiranagar, Bengaluru',
-  },
-];
-
-export default function CitizenReportFormPage() {
+export default function CitizenSubmitPage() {
   const router = useRouter();
 
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('auto');
+  const [category, setCategory] = useState('Roads & Potholes');
   const [address, setAddress] = useState('80 Feet Road, Koramangala, Bengaluru');
   const [lat, setLat] = useState(12.9358);
   const [lng, setLng] = useState(77.6251);
@@ -72,25 +56,30 @@ export default function CitizenReportFormPage() {
     }
   };
 
-  const applyDemoPreset = (preset: (typeof JUDGE_DEMO_PRESETS)[0]) => {
-    setDescription(preset.desc);
-    setCategory(preset.cat);
-    setLat(preset.lat);
-    setLng(preset.lng);
-    setAddress(preset.address);
-    setErrorMessage('');
+  const handleRemovePhoto = () => {
+    setPhoto(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
   };
 
-  const handleUseLocation = () => {
+  const handleMapCoordChange = (newLat: number, newLng: number) => {
+    setLat(newLat);
+    setLng(newLng);
+  };
+
+  const handleUseMyLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
-          setLat(Number(pos.coords.latitude.toFixed(5)));
-          setLng(Number(pos.coords.longitude.toFixed(5)));
-          setAddress('Device GPS Coordinates detected');
+          const detectedLat = Number(pos.coords.latitude.toFixed(5));
+          const detectedLng = Number(pos.coords.longitude.toFixed(5));
+          setLat(detectedLat);
+          setLng(detectedLng);
+          setAddress('Current Device GPS Location');
         },
         () => {
-          // Default fallback
           setAddress('Koramangala 80 Feet Road, Bengaluru');
         }
       );
@@ -100,7 +89,7 @@ export default function CitizenReportFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!description.trim() || description.trim().length < 5) {
-      setErrorMessage('Please provide a brief description of the issue (at least 5 characters).');
+      setErrorMessage('Please describe the issue (minimum 5 characters).');
       return;
     }
 
@@ -125,13 +114,13 @@ export default function CitizenReportFormPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to submit report');
+        throw new Error(data.error || 'Failed to submit complaint.');
       }
 
-      // Immediately redirect to AI result and tracking timeline
+      // Redirect to report placeholder page
       router.push(`/report/${data.tracking_code}`);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Error submitting complaint';
+      const msg = err instanceof Error ? err.message : 'Error submitting report';
       setErrorMessage(msg);
       setIsSubmitting(false);
     }
@@ -139,7 +128,7 @@ export default function CitizenReportFormPage() {
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-8 sm:py-12 w-full flex flex-col gap-6">
-      {/* Title & Introduction */}
+      {/* Header */}
       <div>
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200 mb-2">
           <span>⚡ Fast Citizen Portal</span>
@@ -147,44 +136,25 @@ export default function CitizenReportFormPage() {
           <span>Submit in &lt; 1 minute</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          File a Civic Complaint
+          File a Civic Issue
         </h1>
         <p className="text-sm text-slate-600 mt-1">
-          Report road damage, sanitation hazards, or safety hazards. Our AI engine categorizes, links duplicates, and prioritizes your report for municipal action.
+          Report potholes, broken streetlights, water leaks, or civic hazards in under a minute. Drop a map pin and attach an optional photo.
         </p>
       </div>
 
-      {/* Judge Demo Quick-Fill Presets */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/60 p-4 rounded-2xl border border-blue-200/80 shadow-xs">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
-            <span>🎯</span> Quick Test Presets (For Judges)
-          </span>
-          <span className="text-[11px] text-blue-700 font-medium">Click to populate</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {JUDGE_DEMO_PRESETS.map((p, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => applyDemoPreset(p)}
-              className="text-left text-xs bg-white hover:bg-blue-50/50 active:bg-blue-100 p-2.5 rounded-xl border border-blue-200/70 text-slate-800 font-medium transition-all shadow-2xs hover:border-blue-400"
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Complaint Submission Form */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col gap-5">
+      {/* Submission Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col gap-5"
+      >
         {errorMessage && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-semibold">
             {errorMessage}
           </div>
         )}
 
-        {/* Description Field */}
+        {/* Issue Description */}
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
             Describe the Issue <span className="text-red-500">*</span>
@@ -192,29 +162,28 @@ export default function CitizenReportFormPage() {
           <textarea
             rows={3}
             required
-            placeholder="e.g. Deep pothole causing accidents near Sony World signal, broken streetlight..."
+            placeholder="e.g. Deep pothole damaging vehicles, uncovered manhole outside school gate, sparking electric wire..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
           />
           <div className="flex justify-between items-center text-[11px] text-slate-400 mt-1">
-            <span>Be as specific as possible about the hazard.</span>
+            <span>Provide key details for municipal field crew.</span>
             <span>{description.length} chars</span>
           </div>
         </div>
 
-        {/* Category Selector */}
+        {/* Category Dropdown */}
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-            Municipal Category
+            Category
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
           >
-            <option value="auto">✨ Auto-Detect via AI / Keywords</option>
-            {CIVIC_CATEGORIES.filter((c) => c !== 'Other').map((c) => (
+            {CIVIC_CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -222,18 +191,57 @@ export default function CitizenReportFormPage() {
           </select>
         </div>
 
-        {/* Location Section */}
-        <div className="flex flex-col gap-3 pt-1 border-t border-slate-100">
+        {/* Photo Upload */}
+        <div className="pt-1 border-t border-slate-100">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+            Photo Upload <span className="text-slate-400 font-normal">(Optional)</span>
+          </label>
+          <div className="flex items-center gap-4">
+            <label className="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors shrink-0">
+              <span>📷 Choose Photo</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+            </label>
+            {previewUrl && (
+              <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0 group">
+                <Image
+                  src={previewUrl}
+                  alt="Upload preview"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+                <button
+                  type="button"
+                  onClick={handleRemovePhoto}
+                  className="absolute inset-0 bg-black/50 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+            <span className="text-xs text-slate-500 truncate">
+              {photo ? photo.name : 'No image chosen (camera or gallery)'}
+            </span>
+          </div>
+        </div>
+
+        {/* Location Section with Leaflet Map */}
+        <div className="flex flex-col gap-3 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              Location / Landmark
+              Pin Location on Map
             </label>
             <button
               type="button"
-              onClick={handleUseLocation}
+              onClick={handleUseMyLocation}
               className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
             >
-              📍 My Location
+              📍 Use Device GPS
             </button>
           </div>
 
@@ -249,7 +257,7 @@ export default function CitizenReportFormPage() {
                   setLng(p.lng);
                 }}
                 className={`text-[11px] px-2.5 py-1 rounded-lg border font-medium transition-all ${
-                  address === p.address
+                  lat === p.lat && lng === p.lng
                     ? 'bg-blue-600 text-white border-blue-600 shadow-2xs font-semibold'
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`}
@@ -259,9 +267,16 @@ export default function CitizenReportFormPage() {
             ))}
           </div>
 
+          {/* Interactive Leaflet Location Map */}
+          <LocationPickerMap
+            lat={lat}
+            lng={lng}
+            onChange={handleMapCoordChange}
+          />
+
           <input
             type="text"
-            placeholder="Street address or landmark name..."
+            placeholder="Street address or landmark..."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
@@ -295,39 +310,7 @@ export default function CitizenReportFormPage() {
           </div>
         </div>
 
-        {/* Optional Photo Upload */}
-        <div className="pt-1 border-t border-slate-100">
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-            Attach Photo <span className="text-slate-400 font-normal">(Optional)</span>
-          </label>
-          <div className="flex items-center gap-4">
-            <label className="cursor-pointer px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 transition-colors shrink-0">
-              <span>Choose Photo</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoChange}
-                className="hidden"
-              />
-            </label>
-            {previewUrl && (
-              <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0">
-                <Image
-                  src={previewUrl}
-                  alt="Upload preview"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-            )}
-            <span className="text-xs text-slate-400 truncate">
-              {photo ? photo.name : 'No image chosen'}
-            </span>
-          </div>
-        </div>
-
-        {/* Submit Button */}
+        {/* Submit Action */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -336,11 +319,11 @@ export default function CitizenReportFormPage() {
           {isSubmitting ? (
             <>
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-              <span>Processing AI Pipeline...</span>
+              <span>Submitting Report...</span>
             </>
           ) : (
             <>
-              <span>Submit Report & Track</span>
+              <span>Submit Civic Complaint</span>
               <span>→</span>
             </>
           )}
