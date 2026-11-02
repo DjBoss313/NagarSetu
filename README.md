@@ -41,42 +41,6 @@ flowchart LR
 
 ---
 
-## Local Setup & Quick Start (Windows PowerShell)
-
-### Prerequisites
-- Node.js (v20 or v22 recommended)
-- Windows PowerShell
-
-### 1. Install Dependencies
-```powershell
-npm.cmd install
-```
-
-### 2. Configure Environment (Optional)
-Secrets stay only in `.env.local` (which is git-ignored). To run with Gemini AI enabled, copy `.env.example`:
-```powershell
-Copy-Item .env.example .env.local
-```
-Add your API key inside `.env.local`:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-```
-> **Note**: NagarSetu works **100% with no API key**. If `GEMINI_API_KEY` is omitted or times out, the app automatically uses rule-based fallbacks, clearly labelled in the UI as `"Fallback summary (no LLM key)"` and `"Template brief (no LLM key)"`.
-
-### 3. Verify Seed Dataset & AI Pipeline
-The database automatically seeds 45 realistic synthetic complaints across Bengaluru on an empty database:
-```powershell
-npm.cmd run verify-seed
-```
-
-### 4. Run the Development Server
-```powershell
-npm.cmd run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
 
 ## The AI Approach
 
