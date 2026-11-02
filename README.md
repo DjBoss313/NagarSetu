@@ -41,43 +41,6 @@ flowchart LR
 
 ---
 
-## Local Setup & Quick Start (Windows PowerShell)
-
-### Prerequisites
-- Node.js (v20 or v22 recommended)
-- Windows PowerShell
-
-### 1. Install Dependencies
-```powershell
-npm.cmd install
-```
-
-### 2. Configure Environment (Optional)
-Secrets stay only in `.env.local` (which is git-ignored). To run with Gemini AI enabled, copy `.env.example`:
-```powershell
-Copy-Item .env.example .env.local
-```
-Add your API key inside `.env.local`:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-```
-> **Note**: NagarSetu works **100% with no API key**. If `GEMINI_API_KEY` is omitted or times out, the app automatically uses rule-based fallbacks, clearly labelled in the UI as `"Fallback summary (no LLM key)"` and `"Template brief (no LLM key)"`.
-
-### 3. Verify Seed Dataset & AI Pipeline
-The database automatically seeds 45 realistic synthetic complaints across Bengaluru on an empty database:
-```powershell
-npm.cmd run verify-seed
-```
-
-### 4. Run the Development Server
-```powershell
-npm.cmd run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
 ## The AI Approach
 
 All AI logic runs **synchronously in the submit request**, in `lib/ai/`, before returning the HTTP response:
@@ -128,35 +91,3 @@ All AI logic runs **synchronously in the submit request**, in `lib/ai/`, before 
 
 ---
 
-## Deploying to Google Cloud Run
-
-NagarSetu is packaged as a minimal, standalone container image with native build tools for compiling `better-sqlite3`.
-
-### 1. Build and Deploy
-Run the following Google Cloud SDK command from the project root:
-
-```powershell
-gcloud run deploy nagarsetu `
-  --source . `
-  --region us-central1 `
-  --allow-unauthenticated `
-  --max-instances 1 `
-  --memory 1Gi `
-  --set-env-vars GEMINI_MODEL=gemini-2.5-flash
-```
-
-> **Why `--max-instances 1`?**
-> SQLite is an embedded single-file database (`data/nagarsetu.db`). Setting `--max-instances 1` ensures all visitors and concurrent requests share the exact same SQLite file and maintain state consistency.
-
-### 2. Optional: Add Gemini API Key on Cloud Run
-To enable live Gemini AI summarization and cluster action briefs:
-```powershell
-gcloud run services update nagarsetu `
-  --region us-central1 `
-  --update-env-vars GEMINI_API_KEY=your_actual_api_key_here
-```
-
-### Windows-Specific Notes for Docker
-- If building locally with `docker build -t nagarsetu .`:
-  - Ensure **Docker Desktop** is running with the **WSL 2 backend** enabled.
-  - Line endings: Git on Windows may convert LF to CRLF; Dockerfiles and Linux containers expect LF. The included `.dockerignore` prevents unnecessary files from being copied.
