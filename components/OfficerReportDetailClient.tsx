@@ -1,19 +1,19 @@
 'use client';
 
 import { ALLOWED_STATUS_TRANSITIONS, PriorityFactor, Report, ReportStatus, StatusHistory } from '@/lib/types';
-import { getPriorityBadgeClass } from '@/lib/ui';
+import { getPriorityBadgeClass, getStatusBadgeClass } from '@/lib/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const COMMON_ASSIGNEES = [
-  'Ward 112 Road Maintenance Crew',
-  'Bescom Electrical Dispatch',
-  'BWSSB Water & Sewage Division',
-  'BBMP Solid Waste Management',
-  'Traffic & Encroachment Task Force',
-  'Emergency Field Response Team',
+  'MCC Road Infrastructure & Maintenance Squad',
+  'MESCOM Electrical Dispatch (Mangalore)',
+  'MCC Water Supply & Drainage Division',
+  'MCC Solid Waste & Environmental Health',
+  'Mangaluru Public Safety & Traffic Task Force',
+  'MCC Rapid Emergency Field Response Team',
 ];
 
 interface OfficerReportDetailClientProps {
@@ -67,7 +67,10 @@ export default function OfficerReportDetailClient({
     try {
       const res = await fetch(`/api/reports/${report.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-role': 'officer',
+        },
         body: JSON.stringify({
           status: targetStatus,
           note: statusNote.trim() || undefined,
@@ -103,7 +106,10 @@ export default function OfficerReportDetailClient({
     try {
       const res = await fetch(`/api/reports/${report.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-role': 'officer',
+        },
         body: JSON.stringify({
           assignee: assigneeInput.trim(),
           actor: 'Officer',
@@ -136,7 +142,10 @@ export default function OfficerReportDetailClient({
     try {
       const res = await fetch(`/api/reports/${report.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-role': 'officer',
+        },
         body: JSON.stringify({
           duplicate_action: action,
           actor: 'Officer',
@@ -202,39 +211,33 @@ export default function OfficerReportDetailClient({
       )}
 
       {/* Main Header Card */}
-      <section className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
               Report ID #{report.id}
             </span>
-            <span className="font-mono text-xs font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded border border-slate-200">
+            <span className="font-mono text-xs font-bold bg-slate-100 text-slate-800 px-2.5 py-0.5 rounded-lg border border-slate-200">
               {report.tracking_code}
             </span>
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
               {report.category}
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
             {report.summary || report.description}
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">
             Registered on {new Date(report.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
           </p>
         </div>
 
         <div className="flex flex-col sm:items-end gap-1.5 shrink-0">
-          <span className="text-xs font-semibold text-slate-500">Status</span>
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</span>
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold border ${
-              report.status === 'Resolved'
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                : report.status === 'Rejected'
-                ? 'bg-red-50 text-red-700 border-red-200'
-                : report.status === 'Merged'
-                ? 'bg-purple-50 text-purple-700 border-purple-200'
-                : 'bg-blue-50 text-blue-700 border-blue-200'
-            }`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold border shadow-2xs ${getStatusBadgeClass(
+              report.status
+            )}`}
           >
             {report.status}
           </span>
@@ -345,7 +348,7 @@ export default function OfficerReportDetailClient({
       {/* Workflow Controls: Assign & Status Transitions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Department / Officer Assignment */}
-        <section className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-card flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
               Department & Personnel Assignment
@@ -365,7 +368,7 @@ export default function OfficerReportDetailClient({
                 placeholder="Enter crew or officer name..."
                 value={assigneeInput}
                 onChange={(e) => setAssigneeInput(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:border-blue-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
               />
             </div>
 
@@ -380,7 +383,7 @@ export default function OfficerReportDetailClient({
                     key={unit}
                     type="button"
                     onClick={() => setAssigneeInput(unit)}
-                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors"
+                    className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors cursor-pointer"
                   >
                     {unit.split(' ')[0]} {unit.split(' ')[1]}
                   </button>
@@ -391,7 +394,7 @@ export default function OfficerReportDetailClient({
             <button
               type="submit"
               disabled={isUpdatingAssignee}
-              className="mt-1 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl transition-colors shadow-2xs"
+              className="mt-1 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-xs cursor-pointer"
             >
               {isUpdatingAssignee ? 'Updating...' : 'Save Assignment'}
             </button>
@@ -399,7 +402,7 @@ export default function OfficerReportDetailClient({
         </section>
 
         {/* Change Status with Enforced Transitions */}
-        <section className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-card flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
               Update Status Lifecycle
@@ -425,9 +428,9 @@ export default function OfficerReportDetailClient({
                       key={st}
                       type="button"
                       onClick={() => setSelectedNextStatus(st)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                         selectedNextStatus === st
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-2xs'
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                           : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
                       }`}
                     >
@@ -451,7 +454,7 @@ export default function OfficerReportDetailClient({
                 placeholder="Optional notes for the status change (e.g. Field inspection completed, repair initiated)..."
                 value={statusNote}
                 onChange={(e) => setStatusNote(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 resize-none"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none"
               />
             </div>
 
@@ -460,7 +463,7 @@ export default function OfficerReportDetailClient({
                 type="button"
                 disabled={isUpdatingStatus}
                 onClick={() => handleStatusChange(selectedNextStatus)}
-                className="py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-400 text-white font-bold text-xs rounded-xl transition-colors shadow-2xs"
+                className="py-2.5 bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-700 hover:to-amber-600 active:scale-95 disabled:opacity-50 text-white font-bold text-xs rounded-xl transition-all shadow-xs cursor-pointer"
               >
                 {isUpdatingStatus ? 'Transitioning...' : `Confirm Status Change: ${report.status} → ${selectedNextStatus}`}
               </button>
@@ -472,7 +475,7 @@ export default function OfficerReportDetailClient({
       {/* AI Assessment, Priority Factors & Photo */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* AI Triage & Factors */}
-        <section className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-card flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
               AI Triage & Priority Evaluation
@@ -494,13 +497,13 @@ export default function OfficerReportDetailClient({
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                 Score:
               </span>
-              <span className="text-2xl font-extrabold font-mono text-slate-900">
+              <span className="text-2xl font-black font-mono text-slate-900">
                 {report.priority_score}
               </span>
-              <span className="text-xs text-slate-400">/ 100</span>
+              <span className="text-xs font-semibold text-slate-400">/ 100</span>
             </div>
 
-            <span className={`text-xs font-bold px-2.5 py-1 rounded-md border ${getPriorityBadgeClass(report.priority_label)}`}>
+            <span className={`text-xs font-bold px-3 py-1 rounded-lg border ${getPriorityBadgeClass(report.priority_label)}`}>
               {report.priority_label} Priority
             </span>
           </div>
@@ -514,9 +517,9 @@ export default function OfficerReportDetailClient({
               priorityFactors.map((f, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between text-xs bg-slate-50 p-2.5 rounded-lg border border-slate-100 text-slate-800"
+                  className="flex items-center justify-between text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-slate-800"
                 >
-                  <span>+{f.points} {f.reason}</span>
+                  <span className="font-medium">+{f.points} {f.reason}</span>
                   <span className="font-mono font-bold text-blue-700 ml-2">+{f.points}</span>
                 </div>
               ))
@@ -527,7 +530,7 @@ export default function OfficerReportDetailClient({
         </section>
 
         {/* Location & Photo */}
-        <section className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-card flex flex-col gap-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-100 pb-3">
             Location & Evidence
           </h2>
@@ -543,7 +546,7 @@ export default function OfficerReportDetailClient({
           {report.image_path ? (
             <div className="flex flex-col gap-1">
               <span className="text-xs font-semibold text-slate-500">Attached Photo:</span>
-              <div className="relative w-full h-48 rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+              <div className="relative w-full h-48 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner">
                 <Image
                   src={report.image_path}
                   alt="Complaint photo"
@@ -554,7 +557,7 @@ export default function OfficerReportDetailClient({
               </div>
             </div>
           ) : (
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-400 italic text-center">
+            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-400 italic text-center">
               No photo uploaded for this report.
             </div>
           )}
@@ -562,27 +565,27 @@ export default function OfficerReportDetailClient({
       </div>
 
       {/* Status History Timeline */}
-      <section className="bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs flex flex-col gap-4">
+      <section className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-card flex flex-col gap-4">
         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
           Complete Audit Trail & Status History
         </h2>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2.5">
           {history.map((item) => (
             <div
               key={item.id}
-              className="flex items-start justify-between text-xs p-3 bg-slate-50 rounded-xl border border-slate-100"
+              className="flex items-start justify-between text-xs p-3.5 bg-slate-50/80 rounded-2xl border border-slate-100"
             >
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-slate-900">
                     {item.from_status === item.to_status ? item.to_status : `${item.from_status} → ${item.to_status}`}
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-semibold">
+                  <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-200 text-slate-800 font-bold">
                     {item.actor}
                   </span>
                 </div>
-                {item.note && <span className="text-slate-600 mt-0.5">{item.note}</span>}
+                {item.note && <span className="text-slate-600 mt-0.5 font-medium">{item.note}</span>}
               </div>
 
               <div className="text-right shrink-0 ml-3">
@@ -599,7 +602,7 @@ export default function OfficerReportDetailClient({
       </section>
 
       {/* Mocked Notification Log (PLAN.md Requirement) */}
-      <section className="bg-slate-900 text-slate-100 rounded-2xl p-6 border border-slate-800 shadow-sm flex flex-col gap-4">
+      <section className="bg-slate-900 text-slate-100 rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-card flex flex-col gap-4">
         <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-base">📬</span>
@@ -634,7 +637,7 @@ export default function OfficerReportDetailClient({
             return (
               <div
                 key={h.id}
-                className="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
               >
                 <div className="flex items-start sm:items-center gap-2">
                   <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-400/30 shrink-0">

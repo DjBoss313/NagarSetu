@@ -15,7 +15,7 @@ interface SeedReportItem {
 }
 
 /**
- * Synchronously seeds the SQLite database with 45 realistic synthetic Bengaluru complaints
+ * Synchronously seeds the SQLite database with 45 realistic synthetic Mangaluru complaints
  * if the reports table is currently empty.
  *
  * @param db - SQLite Database connection instance
@@ -127,17 +127,17 @@ export function seedDatabaseSync(db: Database.Database, force = false): boolean 
     }
 
     // Link intentional near-duplicates
-    if (insertedIdsByTracking['NS-KO0201'] && insertedIdsByTracking['NS-KO0202']) {
+    if (insertedIdsByTracking['NS-KA0201'] && insertedIdsByTracking['NS-KA0202']) {
       db.prepare('UPDATE reports SET duplicate_of = ? WHERE id = ?').run(
-        insertedIdsByTracking['NS-KO0201'],
-        insertedIdsByTracking['NS-KO0202']
+        insertedIdsByTracking['NS-KA0201'],
+        insertedIdsByTracking['NS-KA0202']
       );
     }
 
-    if (insertedIdsByTracking['NS-IN0301'] && insertedIdsByTracking['NS-IN0302']) {
+    if (insertedIdsByTracking['NS-LA0301'] && insertedIdsByTracking['NS-LA0302']) {
       db.prepare('UPDATE reports SET duplicate_of = ? WHERE id = ?').run(
-        insertedIdsByTracking['NS-IN0301'],
-        insertedIdsByTracking['NS-IN0302']
+        insertedIdsByTracking['NS-LA0301'],
+        insertedIdsByTracking['NS-LA0302']
       );
     }
   });

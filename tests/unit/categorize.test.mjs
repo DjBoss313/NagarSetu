@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 const CATEGORY_KEYWORDS = [
   {
     category: 'Electricity & Streetlights',
-    keywords: ['streetlight', 'street light', 'pole', 'wire', 'transformer', 'power cut', 'dark', 'voltage', 'shock', 'electric', 'bescom'],
+    keywords: ['streetlight', 'street light', 'pole', 'wire', 'transformer', 'power cut', 'dark', 'voltage', 'shock', 'electric', 'mescom', 'bescom'],
   },
   {
     category: 'Water & Sewage',

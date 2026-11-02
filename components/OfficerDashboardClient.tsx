@@ -72,51 +72,51 @@ export default function OfficerDashboardClient({
     <div className="flex flex-col gap-6">
       {/* 1. Summary Cards */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
             Total Complaints
           </span>
-          <span className="text-3xl font-extrabold font-mono text-slate-900">
+          <span className="text-3xl font-black font-mono text-slate-900">
             {metrics.total}
           </span>
           <span className="text-[11px] text-slate-400">Registered across city wards</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-red-200/80 shadow-2xs flex flex-col gap-1 bg-gradient-to-br from-white to-red-50/30">
+        <div className="bg-white p-5 rounded-2xl border border-red-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1 bg-gradient-to-br from-white to-red-50/40">
           <span className="text-xs font-bold uppercase tracking-wider text-red-700">
             Critical Priority
           </span>
-          <span className="text-3xl font-extrabold font-mono text-red-700">
+          <span className="text-3xl font-black font-mono text-red-700">
             {metrics.critical}
           </span>
-          <span className="text-[11px] text-red-600/80">Requires immediate dispatch</span>
+          <span className="text-[11px] text-red-600/80 font-medium">Requires immediate dispatch</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
+        <div className="bg-white p-5 rounded-2xl border border-amber-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1 bg-gradient-to-br from-white to-amber-50/30">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-700">
             Active / Open
           </span>
-          <span className="text-3xl font-extrabold font-mono text-slate-800">
+          <span className="text-3xl font-black font-mono text-amber-800">
             {metrics.open}
           </span>
-          <span className="text-[11px] text-slate-400">In triage, assigned or progress</span>
+          <span className="text-[11px] text-amber-700/70 font-medium">In triage, assigned or progress</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+        <div className="bg-white p-5 rounded-2xl border border-emerald-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1 bg-gradient-to-br from-white to-emerald-50/30">
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
             Resolved
           </span>
-          <span className="text-3xl font-extrabold font-mono text-emerald-700">
+          <span className="text-3xl font-black font-mono text-emerald-700">
             {metrics.resolved}
           </span>
-          <span className="text-[11px] text-slate-400">Completed & closed</span>
+          <span className="text-[11px] text-emerald-700/70 font-medium">Completed & closed</span>
         </div>
       </section>
 
       {/* 2. Simple Charts */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Reports by Category Chart */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
               Complaints by Category
@@ -148,7 +148,7 @@ export default function OfficerDashboardClient({
         </div>
 
         {/* Reports by Status Chart */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-4">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
               Workflow Status Progression
@@ -173,16 +173,16 @@ export default function OfficerDashboardClient({
                         status === 'Resolved'
                           ? 'bg-emerald-500'
                           : status === 'In Progress'
-                          ? 'bg-indigo-500'
-                          : status === 'Assigned'
-                          ? 'bg-blue-500'
-                          : status === 'Under Review'
                           ? 'bg-amber-500'
+                          : status === 'Assigned'
+                          ? 'bg-amber-400'
+                          : status === 'Under Review'
+                          ? 'bg-amber-300'
                           : status === 'Rejected'
-                          ? 'bg-red-400'
+                          ? 'bg-slate-400'
                           : status === 'Merged'
                           ? 'bg-purple-400'
-                          : 'bg-slate-400'
+                          : 'bg-red-500'
                       }`}
                       style={{ width: `${pct}%` }}
                     />
@@ -195,7 +195,7 @@ export default function OfficerDashboardClient({
       </section>
 
       {/* 3. Filters & Search */}
-      <section className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-4">
+      <section className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card flex flex-col gap-4">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
           {/* Search box */}
           <div className="relative flex-1">
@@ -206,9 +206,9 @@ export default function OfficerDashboardClient({
               placeholder="Search by code (NS-...), keyword, or address..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all"
             />
-            <span aria-hidden="true" className="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
+            <span aria-hidden="true" className="absolute left-3 top-3 text-xs text-slate-400">🔍</span>
           </div>
 
           {/* Status Filter */}
@@ -217,7 +217,7 @@ export default function OfficerDashboardClient({
             aria-label="Filter complaints by status"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
           >
             <option value="All">All Statuses</option>
             {REPORT_STATUSES.map((s) => (
@@ -233,7 +233,7 @@ export default function OfficerDashboardClient({
             aria-label="Filter complaints by category"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
           >
             <option value="All">All Categories</option>
             {CIVIC_CATEGORIES.map((c) => (
@@ -249,7 +249,7 @@ export default function OfficerDashboardClient({
             aria-label="Filter complaints by priority level"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500"
+            className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
           >
             <option value="All">All Priorities</option>
             <option value="Critical">Critical (75-100)</option>
@@ -264,10 +264,10 @@ export default function OfficerDashboardClient({
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800">
+            <h2 className="text-sm font-extrabold uppercase tracking-wider text-slate-800">
               Priority-Ranked Complaints
             </h2>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-mono font-bold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 font-mono font-bold">
               {filteredReports.length}
             </span>
           </div>
@@ -277,11 +277,13 @@ export default function OfficerDashboardClient({
         </div>
 
         {filteredReports.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 text-slate-500 text-sm">
-            No complaints match the current filter criteria.
+          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 text-slate-500 text-sm shadow-card flex flex-col items-center gap-2">
+            <span className="text-3xl">📋</span>
+            <span className="font-semibold">No complaints match the current filter criteria.</span>
+            <span className="text-xs text-slate-400">Try adjusting your search keywords or resetting filters.</span>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3.5">
             {filteredReports.map((report) => {
               // Extract top factor for display
               let topFactorText = '';
@@ -289,7 +291,6 @@ export default function OfficerDashboardClient({
                 try {
                   const factors: PriorityFactor[] = JSON.parse(report.priority_factors_json);
                   if (factors.length > 0) {
-                    // Pick the highest scoring factor other than base category if available
                     const sortedFactors = [...factors].sort((a, b) => b.points - a.points);
                     const topF = sortedFactors[0];
                     topFactorText = `+${topF.points} ${topF.reason}`;
@@ -302,40 +303,40 @@ export default function OfficerDashboardClient({
               return (
                 <div
                   key={report.id}
-                  className="bg-white rounded-2xl p-5 border border-slate-200 shadow-2xs hover:border-blue-300 transition-all flex flex-col sm:flex-row items-start justify-between gap-4 group"
+                  className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col sm:flex-row items-start justify-between gap-4 group hover:-translate-y-0.5"
                 >
                   <div className="flex-1 flex flex-col gap-2 min-w-0">
                     {/* Header line: Tracking code, category, priority badge, status */}
                     <div className="flex items-center flex-wrap gap-2 text-xs">
-                      <span className="font-mono font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200">
+                      <span className="font-mono font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-lg border border-slate-200">
                         {report.tracking_code}
                       </span>
-                      <span className="font-bold text-slate-700 px-2 py-0.5 rounded-md bg-slate-50 border border-slate-200">
+                      <span className="font-bold text-slate-700 px-2.5 py-0.5 rounded-lg bg-slate-50 border border-slate-200">
                         {report.category}
                       </span>
                       <span
-                        className={`font-bold px-2.5 py-0.5 rounded-md border ${getPriorityBadgeClass(
+                        className={`font-bold px-2.5 py-0.5 rounded-lg border ${getPriorityBadgeClass(
                           report.priority_label
                         )}`}
                       >
                         Score {report.priority_score} • {report.priority_label}
                       </span>
                       <span
-                        className={`font-semibold px-2 py-0.5 rounded-md border ${getStatusBadgeClass(
+                        className={`font-bold px-2.5 py-0.5 rounded-lg border ${getStatusBadgeClass(
                           report.status
                         )}`}
                       >
                         {report.status}
                       </span>
                       {report.duplicate_of && (
-                        <span className="font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 text-[11px]">
+                        <span className="font-bold px-2 py-0.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 text-[11px]">
                           ⚡ Duplicate Link
                         </span>
                       )}
                     </div>
 
                     {/* Description / Summary */}
-                    <p className="text-sm text-slate-800 font-medium line-clamp-2">
+                    <p className="text-sm text-slate-800 font-semibold line-clamp-2">
                       {report.summary || report.description}
                     </p>
 
@@ -348,7 +349,7 @@ export default function OfficerDashboardClient({
                     )}
 
                     {/* Address & Meta */}
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mt-1">
+                    <div className="flex items-center gap-4 text-xs text-slate-500 mt-1 font-medium">
                       <span className="truncate">
                         📍 {report.address || `${report.lat.toFixed(4)}, ${report.lng.toFixed(4)}`}
                       </span>
@@ -367,7 +368,7 @@ export default function OfficerDashboardClient({
                   <div className="sm:self-center shrink-0">
                     <Link
                       href={`/officer/reports/${report.id}`}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition-colors shadow-2xs inline-block"
+                      className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-95 text-white font-bold text-xs rounded-xl transition-all shadow-xs inline-block cursor-pointer"
                     >
                       Manage Report →
                     </Link>

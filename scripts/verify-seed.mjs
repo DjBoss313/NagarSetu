@@ -1,7 +1,7 @@
 /**
  * Seed Verification Script for NagarSetu
  * Verifies:
- * 1. Seed dataset loads successfully (~45 reports across Bengaluru)
+ * 1. Seed dataset loads successfully (~45 reports across Mangaluru)
  * 2. Intentional duplicates are linked and TF-IDF + token overlap detects them
  * 3. Hotspot clusters (300m radius, >= 3 reports) are generated and persisted
  * 4. Priority scores and sensitive place proximity are calculated

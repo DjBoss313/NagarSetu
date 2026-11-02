@@ -11,7 +11,7 @@ import { seedDatabaseSync } from './seed';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const UPLOADS_DIR = path.join(process.cwd(), 'data', 'uploads');
-const DB_PATH = path.join(process.cwd(), 'data', 'nagarsetu.db');
+const DB_PATH = process.env.DATABASE_PATH || path.join(process.cwd(), 'data', 'nagarsetu.db');
 
 function ensureDirectoriesExist(): void {
   if (!fs.existsSync(/* turbopackIgnore: true */ DATA_DIR)) {

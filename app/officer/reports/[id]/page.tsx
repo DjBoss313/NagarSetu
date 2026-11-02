@@ -1,5 +1,7 @@
+import OfficerAuthRequired from '@/components/OfficerAuthRequired';
 import OfficerNav from '@/components/OfficerNav';
 import OfficerReportDetailClient from '@/components/OfficerReportDetailClient';
+import { getAuthContext } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { Report, StatusHistory } from '@/lib/types';
 import { notFound } from 'next/navigation';
@@ -11,6 +13,15 @@ interface PageProps {
 }
 
 export default async function OfficerReportDetailPage({ params }: PageProps) {
+  const { isOfficer } = await getAuthContext();
+
+  if (!isOfficer) {
+    return (
+      <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+        <OfficerAuthRequired />
+      </div>
+    );
+  }
   const { id } = await params;
   const reportId = parseInt(id, 10);
   if (isNaN(reportId)) {

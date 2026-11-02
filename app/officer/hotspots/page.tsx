@@ -1,4 +1,6 @@
+import OfficerAuthRequired from '@/components/OfficerAuthRequired';
 import OfficerNav from '@/components/OfficerNav';
+import { getAuthContext } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { Cluster, Report } from '@/lib/types';
 import { getNeighborhoodName } from '@/lib/ui';
@@ -6,7 +8,16 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default function OfficerHotspotsPage() {
+export default async function OfficerHotspotsPage() {
+  const { isOfficer } = await getAuthContext();
+
+  if (!isOfficer) {
+    return (
+      <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+        <OfficerAuthRequired />
+      </div>
+    );
+  }
   let clusters: Cluster[] = [];
   const reportsByCluster: Record<number, Report[]> = {};
   let dbError: string | null = null;
@@ -55,42 +66,44 @@ export default function OfficerHotspotsPage() {
 
         {/* Metrics Overview */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
+          <div className="bg-white p-5 rounded-2xl border border-purple-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1 bg-gradient-to-br from-white to-purple-50/40">
             <span className="text-xs font-bold uppercase tracking-wider text-purple-700">
               Active Hotspots
             </span>
-            <span className="text-3xl font-extrabold font-mono text-purple-900">
+            <span className="text-3xl font-black font-mono text-purple-900">
               {clusters.length}
             </span>
-            <span className="text-[11px] text-slate-400">Identified via distance clustering (~300m)</span>
+            <span className="text-[11px] text-purple-700/70 font-medium">Identified via distance clustering (~300m)</span>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Clustered Reports
             </span>
-            <span className="text-3xl font-extrabold font-mono text-slate-900">
+            <span className="text-3xl font-black font-mono text-slate-900">
               {totalClusteredReports}
             </span>
             <span className="text-[11px] text-slate-400">Complaints consolidated in hotspots</span>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
+          <div className="bg-white p-5 rounded-2xl border border-blue-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-1 bg-gradient-to-br from-white to-blue-50/30">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700">
               Average Density
             </span>
-            <span className="text-3xl font-extrabold font-mono text-blue-700">
+            <span className="text-3xl font-black font-mono text-blue-800">
               {clusters.length > 0 ? (totalClusteredReports / clusters.length).toFixed(1) : 0}
             </span>
-            <span className="text-[11px] text-slate-400">Complaints per geographic cluster</span>
+            <span className="text-[11px] text-blue-700/70 font-medium">Complaints per geographic cluster</span>
           </div>
         </div>
 
         {/* Clusters List */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
           {clusters.length === 0 ? (
-            <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 text-slate-500 text-sm">
-              No active clusters detected yet. Clusters form when at least 3 complaints occur within ~300m.
+            <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 text-slate-500 text-sm shadow-card flex flex-col items-center gap-2">
+              <span className="text-3xl">🗺️</span>
+              <span className="font-semibold">No active clusters detected yet.</span>
+              <span className="text-xs text-slate-400">Clusters automatically form when at least 3 complaints occur within ~300 meters.</span>
             </div>
           ) : (
             clusters.map((cluster) => {
@@ -103,17 +116,17 @@ export default function OfficerHotspotsPage() {
               return (
                 <div
                   key={cluster.id}
-                  className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-2xs flex flex-col gap-5"
+                  className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all flex flex-col gap-5"
                 >
                   {/* Cluster Header */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-extrabold text-base shrink-0 shadow-2xs">
+                      <div className="w-11 h-11 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center font-black text-base shrink-0 shadow-2xs">
                         #{cluster.id}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h2 className="text-base font-extrabold text-slate-900">
+                          <h2 className="text-base sm:text-lg font-black text-slate-900">
                             {areaName}
                           </h2>
                           <span className="text-xs font-mono text-slate-400">
@@ -156,28 +169,28 @@ export default function OfficerHotspotsPage() {
                   </div>
 
                   {/* Executive Action Brief Box */}
-                  <div className="bg-gradient-to-r from-purple-50/70 to-indigo-50/50 rounded-xl p-4 border border-purple-200/80 flex flex-col gap-1.5">
+                  <div className="bg-gradient-to-r from-purple-50/80 to-indigo-50/60 rounded-2xl p-5 border border-purple-200/90 flex flex-col gap-2 shadow-2xs">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold uppercase tracking-wider text-purple-900 flex items-center gap-1.5">
+                      <span className="font-extrabold uppercase tracking-wider text-purple-900 flex items-center gap-1.5">
                         <span>📋</span> Executive Action Brief for Field Crew
                       </span>
                     </div>
-                    <p className="text-sm text-slate-800 font-medium leading-relaxed">
+                    <p className="text-sm text-slate-800 font-semibold leading-relaxed">
                       &quot;{cluster.brief}&quot;
                     </p>
                   </div>
 
                   {/* Member Reports Preview */}
-                  <div className="flex flex-col gap-2 pt-1">
+                  <div className="flex flex-col gap-2.5 pt-1">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
                       Consolidated Complaints ({memberReports.length})
                     </span>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {memberReports.map((r) => (
                         <Link
                           key={r.id}
                           href={`/officer/reports/${r.id}`}
-                          className="p-3 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-white hover:border-blue-400 transition-all flex flex-col gap-1.5 text-xs group"
+                          className="p-3.5 rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-white hover:border-orange-300 hover:shadow-xs transition-all flex flex-col gap-1.5 text-xs group cursor-pointer"
                         >
                           <div className="flex items-center justify-between">
                             <span className="font-mono font-bold text-slate-900 group-hover:text-blue-600 transition-colors">

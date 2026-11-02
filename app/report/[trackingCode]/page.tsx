@@ -1,5 +1,6 @@
 import { getDb } from '@/lib/db';
-import { PriorityFactor, PriorityLabel, Report, StatusHistory } from '@/lib/types';
+import { PriorityFactor, Report, StatusHistory } from '@/lib/types';
+import { getPriorityBadgeClass, getStatusBadgeClass } from '@/lib/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -71,38 +72,25 @@ export default async function ReportDetailPage({ params }: PageProps) {
     ? JSON.parse(report.priority_factors_json)
     : [];
 
-  const getPriorityBadgeClass = (label: PriorityLabel) => {
-    switch (label) {
-      case 'Critical':
-        return 'bg-red-50 text-red-700 border-red-200';
-      case 'High':
-        return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'Medium':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
-      default:
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-    }
-  };
-
   const isMerged = report.status === 'Merged';
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8 sm:py-12 w-full flex flex-col gap-6">
       {/* Header Banner */}
-      <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs uppercase font-bold tracking-wider text-slate-500">
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-xs uppercase font-extrabold tracking-wider text-slate-500">
               Tracking Code
             </span>
-            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
-              Citizen View
+            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              Public Grievance Record
             </span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-wider font-mono text-slate-900">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-wider font-mono text-slate-900">
             {report.tracking_code}
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 mt-1.5 font-medium">
             Filed on{' '}
             {new Date(report.created_at).toLocaleString('en-IN', {
               dateStyle: 'medium',
@@ -111,20 +99,14 @@ export default async function ReportDetailPage({ params }: PageProps) {
           </p>
         </div>
 
-        <div className="flex flex-col sm:items-end gap-1">
-          <span className="text-xs font-semibold text-slate-500">Status</span>
+        <div className="flex flex-col sm:items-end gap-1.5">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Current Status</span>
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
-              report.status === 'Resolved'
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                : report.status === 'Merged'
-                ? 'bg-purple-50 text-purple-700 border-purple-200'
-                : report.status === 'Rejected'
-                ? 'bg-red-50 text-red-700 border-red-200'
-                : 'bg-blue-50 text-blue-700 border-blue-200'
-            }`}
+            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold border shadow-2xs ${getStatusBadgeClass(
+              report.status
+            )}`}
           >
-            <span className="w-2 h-2 rounded-full bg-current"></span>
+            <span className="w-2 h-2 rounded-full bg-current animate-pulse"></span>
             {report.status}
           </span>
         </div>
@@ -180,7 +162,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
       )}
 
       {/* Full Status Timeline from status_history */}
-      <section className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm flex flex-col gap-4">
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card flex flex-col gap-5">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700">
             Status Resolution Timeline
@@ -190,7 +172,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
           </span>
         </div>
 
-        <div className="flex flex-col gap-3 relative before:absolute before:top-3 before:bottom-3 before:left-3.5 before:w-0.5 before:bg-slate-200">
+        <div className="flex flex-col gap-4 relative before:absolute before:top-3 before:bottom-3 before:left-3.5 before:w-0.5 before:bg-slate-200">
           {history.map((event, idx) => {
             const isLatest = idx === history.length - 1;
             return (
@@ -199,7 +181,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-bold border-2 ${
                     isLatest
-                      ? 'bg-blue-600 text-white border-blue-600 ring-4 ring-blue-50'
+                      ? 'bg-orange-600 text-white border-orange-600 ring-4 ring-orange-50'
                       : 'bg-white text-slate-500 border-slate-300'
                   }`}
                 >
@@ -207,7 +189,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
                 </div>
 
                 {/* Content card */}
-                <div className="flex-1 bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs flex flex-col gap-1">
+                <div className="flex-1 bg-slate-50/80 border border-slate-100 rounded-2xl p-3.5 text-xs flex flex-col gap-1">
                   <div className="flex items-center justify-between flex-wrap gap-1">
                     <span className="font-bold text-slate-900">
                       {event.from_status === event.to_status
@@ -224,7 +206,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
 
                   {/* Public note only - sanitize officer notes for citizen */}
                   {event.note && (
-                    <p className="text-slate-600 leading-relaxed mt-0.5">
+                    <p className="text-slate-600 leading-relaxed mt-0.5 font-medium">
                       {event.note}
                     </p>
                   )}
@@ -236,7 +218,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
       </section>
 
       {/* AI Assessment Card */}
-      <section className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm flex flex-col gap-5">
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card flex flex-col gap-5">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-lg">🤖</span>
@@ -341,7 +323,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
       </section>
 
       {/* Details, Location & Photo */}
-      <section className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm flex flex-col gap-4">
+      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-card flex flex-col gap-5">
         <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-100 pb-2">
           Reported Information
         </h3>
@@ -350,26 +332,26 @@ export default async function ReportDetailPage({ params }: PageProps) {
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
             Citizen Description
           </span>
-          <p className="text-xs text-slate-800 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-slate-800 bg-slate-50 p-4 rounded-2xl border border-slate-100 leading-relaxed font-medium">
             {report.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+          <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-0.5">
               Location Landmark
             </span>
-            <span className="font-medium text-slate-800">
+            <span className="font-semibold text-slate-800">
               {report.address || 'Location defined by coordinates'}
             </span>
           </div>
 
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+          <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-0.5">
               GPS Coordinates
             </span>
-            <span className="font-mono font-medium text-slate-700">
+            <span className="font-mono font-bold text-slate-700">
               {report.lat.toFixed(5)}, {report.lng.toFixed(5)}
             </span>
           </div>
@@ -381,7 +363,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
               Attached Photo
             </span>
-            <div className="relative w-full h-48 sm:h-64 rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+            <div className="relative w-full h-56 sm:h-72 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-inner">
               <Image
                 src={report.image_path}
                 alt="Complaint photo"
@@ -392,19 +374,19 @@ export default async function ReportDetailPage({ params }: PageProps) {
             </div>
           </div>
         ) : (
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-400 italic text-center">
+          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-400 italic text-center">
             No photo was attached with this report.
           </div>
         )}
       </section>
 
       {/* Navigation Footer */}
-      <div className="flex items-center justify-between text-xs font-bold pt-1">
-        <Link href="/" className="text-blue-600 hover:text-blue-800 transition-colors">
+      <div className="flex items-center justify-between text-xs font-bold pt-2">
+        <Link href="/" className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-blue-700 hover:border-blue-300 transition-all shadow-2xs">
           ← File Another Complaint
         </Link>
-        <Link href="/track" className="text-slate-600 hover:text-slate-900 transition-colors">
-          Track by Code →
+        <Link href="/track" className="px-4 py-2 rounded-xl bg-orange-600 text-white hover:bg-orange-700 transition-all shadow-xs">
+          Track Another Code →
         </Link>
       </div>
     </main>

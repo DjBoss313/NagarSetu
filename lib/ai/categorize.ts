@@ -35,6 +35,8 @@ const CATEGORY_RULES: Record<Exclude<CivicCategory, 'Other'>, string[]> = {
     'blackout',
     'hanging wire',
     'voltage',
+    'mescom',
+    'bescom',
   ],
   'Public Safety': [
     'manhole',

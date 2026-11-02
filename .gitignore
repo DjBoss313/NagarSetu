@@ -31,6 +31,8 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (secrets stay out of git)
+.env
+.env.*
 .env*.local
 .env.local
 !.env.example

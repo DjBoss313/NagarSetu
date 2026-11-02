@@ -20,7 +20,8 @@ export async function callGemini(
   }
 
   const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  // Send key via header rather than query string to prevent URL logging or proxy leakage
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   const body: Record<string, unknown> = {
     contents: [
@@ -45,6 +46,7 @@ export async function callGemini(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(5000), // 5s timeout enforcement per PLAN.md

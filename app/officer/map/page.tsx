@@ -1,11 +1,22 @@
+import OfficerAuthRequired from '@/components/OfficerAuthRequired';
 import OfficerMapWrapper from '@/components/OfficerMapWrapper';
 import OfficerNav from '@/components/OfficerNav';
+import { getAuthContext } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { Cluster, Report } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-export default function OfficerMapPage() {
+export default async function OfficerMapPage() {
+  const { isOfficer } = await getAuthContext();
+
+  if (!isOfficer) {
+    return (
+      <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+        <OfficerAuthRequired />
+      </div>
+    );
+  }
   let reports: Report[] = [];
   let clusters: Cluster[] = [];
   let dbError: string | null = null;

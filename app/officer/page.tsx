@@ -1,11 +1,22 @@
+import OfficerAuthRequired from '@/components/OfficerAuthRequired';
 import OfficerDashboardClient from '@/components/OfficerDashboardClient';
 import OfficerNav from '@/components/OfficerNav';
+import { getAuthContext } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { Report } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-export default function OfficerDashboardPage() {
+export default async function OfficerDashboardPage() {
+  const { isOfficer } = await getAuthContext();
+
+  if (!isOfficer) {
+    return (
+      <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+        <OfficerAuthRequired />
+      </div>
+    );
+  }
   let reports: Report[] = [];
   let dbError: string | null = null;
 
